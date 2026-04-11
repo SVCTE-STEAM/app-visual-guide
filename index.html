@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web App Features — Interactive Visual Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c10;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7ee8a2;
+    --accent2: #5b9cf6;
+    --accent3: #f59e0b;
+    --accent4: #f472b6;
+    --text: #e8e8f0;
+    --muted: #888899;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  html.light {
+    --bg: #f4f4f0;
+    --surface: #ffffff;
+    --surface2: #eaeae5;
+    --border: #d4d4cc;
+    --accent: #1a9e55;
+    --accent2: #2563eb;
+    --accent3: #d97706;
+    --accent4: #db2777;
+    --text: #111118;
+    --muted: #66667a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background 0.35s, color 0.35s;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(126,232,162,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--accent); }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 13px;
+    max-width: 520px;
+  }
+  .tabs {
+    display: flex; gap: 4px;
+    padding: 24px 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    padding: 10px 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    border-bottom: none;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    color: var(--muted);
+    background: transparent;
+    transition: all 0.2s;
+    position: relative;
+    bottom: -1px;
+  }
+  .tab:hover { color: var(--text); border-color: var(--border); }
+  .tab.active {
+    color: var(--accent);
+    background: var(--surface);
+    border-color: var(--border);
+    border-bottom-color: var(--surface);
+  }
+
+  /* MAIN CONTENT */
+  .content { display: none; padding: 40px; }
+  .content.active { display: block; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* DEMO PANELS */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .demo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .demo-card:hover { border-color: rgba(126,232,162,0.3); transform: translateY(-2px); }
+
+  .demo-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .demo-card-title {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .demo-card-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(126,232,162,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(126,232,162,0.2);
+  }
+  .demo-card-tag.be { background: rgba(91,156,246,0.1); color: var(--accent2); border-color: rgba(91,156,246,0.2); }
+  .demo-card-tag.ux { background: rgba(244,114,182,0.1); color: var(--accent4); border-color: rgba(244,114,182,0.2); }
+
+  .demo-body { padding: 20px 16px; }
+
+  /* TOOLTIP SYSTEM — JS-driven, appended to body to escape overflow:hidden */
+  [data-tip] { cursor: help; }
+  #tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: 220px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s, transform 0.15s;
+    transform: translateY(4px);
+    white-space: normal;
+  }
+  #tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #tooltip-arrow {
+    position: fixed;
+    z-index: 9998;
+    width: 0; height: 0;
+    border: 5px solid transparent;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  #tooltip-arrow.visible { opacity: 1; }
+
+  /* =========== AUTH UI =========== */
+  .auth-form { display: flex; flex-direction: column; gap: 10px; }
+  .auth-label { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pw-wrap { position: relative; }
+  .pw-eye {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 13px;
+    color: var(--muted); padding: 2px;
+  }
+  .auth-submit {
+    width: 100%; padding: 9px;
+    background: rgba(126,232,162,0.12);
+    border: 1px solid rgba(126,232,162,0.35);
+    color: var(--accent); border-radius: 6px;
+    font-family: var(--font-mono); font-size: 12px;
+    cursor: pointer; transition: all 0.2s; margin-top: 4px;
+  }
+  .auth-submit:hover { background: rgba(126,232,162,0.22); }
+  .auth-divider {
+    text-align: center; font-size: 10px; color: var(--muted);
+    position: relative; margin: 2px 0;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: ''; position: absolute; top: 50%; width: 38%; height: 1px;
+    background: var(--border);
+  }
+  .auth-divider::before { left: 0; }
+  .auth-divider::after { right: 0; }
+  .oauth-btn {
+    flex: 1; padding: 7px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 6px;
+    font-family: var(--font-mono); font-size: 11px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .oauth-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* Strength meter */
+  .strength-bar-wrap {
+    height: 5px; background: var(--surface2);
+    border-radius: 3px; overflow: hidden; margin-top: 6px;
+  }
+  .strength-bar { height: 100%; border-radius: 3px; width: 0; transition: width 0.3s, background 0.3s; }
+  .strength-label { font-size: 10px; color: var(--muted); }
+  .strength-rules { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .rule { font-size: 10px; color: var(--muted); transition: color 0.2s; }
+  .rule.pass { color: var(--accent); }
+
+  /* Forgot password steps */
+  .fp-steps { position: relative; }
+  .fp-step { display: none; }
+  .fp-step.active { display: block; animation: fadeIn 0.2s; }
+  .fp-step-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .fp-dots { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
+  .fp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+  .fp-dot.active { background: var(--accent); }
+
+  /* =========== SCHEMA VIEWER =========== */
+  .schema-layout { display: flex; gap: 12px; min-height: 180px; }
+  .schema-tables { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
+  .schema-table {
+    padding: 8px 10px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 6px;
+    font-size: 11px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .schema-table:hover { border-color: rgba(91,156,246,0.4); }
+  .schema-table.active { border-color: var(--accent2); color: var(--accent2); background: rgba(91,156,246,0.06); }
+  .schema-table-icon { font-size: 12px; }
+  .schema-row-count { margin-left: auto; font-size: 9px; color: var(--muted); }
+  .schema-detail { flex: 1; background: var(--surface2); border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
+  .schema-col-header {
+    display: grid; grid-template-columns: 1fr 80px 60px 1fr;
+    padding: 6px 12px; border-bottom: 1px solid var(--border);
+    font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .schema-col-row {
+    display: grid; grid-template-columns: 1fr 80px 60px 1fr;
+    padding: 7px 12px; border-bottom: 1px solid rgba(42,42,58,0.4);
+    font-size: 11px; align-items: center; transition: background 0.15s;
+  }
+  .schema-col-row:hover { background: rgba(255,255,255,0.02); }
+  .schema-col-row:last-child { border-bottom: none; }
+  .col-name { color: var(--text); font-weight: 500; }
+  .col-pk { color: var(--accent3); font-size: 9px; }
+  .col-fk { color: var(--accent4); font-size: 9px; }
+  .col-type { color: var(--accent2); font-size: 10px; }
+  .col-null { font-size: 9px; }
+  .col-null.no { color: #ef4444; }
+  .col-null.yes { color: var(--muted); }
+  .col-note { font-size: 10px; color: var(--muted); }
+
+  /* =========== FRONTEND DEMOS =========== */
+
+  /* Breakpoint buttons */
+  .bp-btn {
+    padding: 5px 10px; font-size: 11px;
+    font-family: var(--font-mono);
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 5px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bp-btn:hover { border-color: var(--accent); color: var(--text); }
+  .bp-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(126,232,162,0.08); }
+
+  /* Responsive demo states */
+  .responsive-demo { background: var(--surface2); border-radius: 8px; padding: 12px; display: flex; gap: 8px; transition: all 0.35s; }
+  .responsive-demo.bp-mobile { flex-direction: column; }
+  .responsive-demo.bp-tablet { flex-direction: row; flex-wrap: wrap; }
+  .responsive-demo.bp-tablet .res-col { flex: 1 1 calc(50% - 4px); min-width: 0; }
+  .responsive-demo.bp-desktop { flex-direction: row; flex-wrap: nowrap; }
+  .responsive-demo.bp-desktop .res-col { flex: 1; }
+  .res-col {
+    min-height: 48px;
+    background: rgba(126,232,162,0.08);
+    border: 1px solid rgba(126,232,162,0.2);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--accent);
+    transition: all 0.35s;
+  }
+
+  /* 2. Dark/Light Toggle */
+  .toggle-row { display: flex; align-items: center; gap: 12px; }
+  .toggle {
+    width: 44px; height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle-knob {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .toggle.on .toggle-knob { left: 23px; }
+  .toggle-label { font-size: 12px; color: var(--muted); }
+
+  /* 3. Loading States */
+  .skeleton-row { display: flex; flex-direction: column; gap: 8px; }
+  .skeleton {
+    height: 14px;
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-radius: 4px;
+  }
+  .skeleton.sm { width: 60%; }
+  .skeleton.xs { width: 40%; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* 4. Toast Notifications */
+  .toast-demo { display: flex; flex-direction: column; gap: 6px; }
+  .toast {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 8px;
+    border-left: 3px solid;
+  }
+  .toast.success { background: rgba(126,232,162,0.08); border-color: var(--accent); color: var(--accent); }
+  .toast.error { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #ef4444; }
+  .toast.info { background: rgba(91,156,246,0.08); border-color: var(--accent2); color: var(--accent2); }
+  .toast-icon { font-size: 13px; }
+
+  /* 5. Form Validation */
+  .form-demo { display: flex; flex-direction: column; gap: 10px; }
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+  .form-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-input.error { border-color: #ef4444; }
+  .form-input.valid { border-color: var(--accent); }
+  .form-hint { font-size: 10px; color: #ef4444; }
+  .form-hint.valid { color: var(--accent); }
+
+  /* 6. Modal */
+  .modal-trigger {
+    padding: 8px 16px;
+    background: rgba(126,232,162,0.1);
+    border: 1px solid rgba(126,232,162,0.3);
+    color: var(--accent);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .modal-trigger:hover { background: rgba(126,232,162,0.2); }
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s; }
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    width: 320px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    animation: slideUp 0.2s;
+  }
+  .modal-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .modal-body { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.7; }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-ghost {
+    padding: 7px 14px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    border-radius: 6px; cursor: pointer;
+    font-family: var(--font-mono); font-size: 12px;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
+  .btn-primary {
+    padding: 7px 14px; border: 1px solid rgba(126,232,162,0.4);
+    background: rgba(126,232,162,0.1); color: var(--accent);
+    border-radius: 6px; cursor: pointer;
+    font-family: var(--font-mono); font-size: 12px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: rgba(126,232,162,0.2); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* 7. Infinite scroll simulation */
+  .scroll-demo {
+    height: 120px;
+    overflow-y: auto;
+    background: var(--surface2);
+    border-radius: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .scroll-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex; justify-content: space-between;
+  }
+  .scroll-item:last-child { border-bottom: none; }
+  .scroll-badge { font-size: 9px; padding: 1px 6px; border-radius: 10px; background: var(--border); color: var(--muted); }
+
+  /* 8. Data Table */
+  .table-demo { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th {
+    text-align: left; padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted); font-weight: 400;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  th:hover { color: var(--accent); }
+  td { padding: 8px 10px; border-bottom: 1px solid rgba(42,42,58,0.5); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .dot-green { background: var(--accent); }
+  .dot-yellow { background: var(--accent3); }
+  .dot-red { background: #ef4444; }
+
+  /* 9. Tabs / accordion */
+  .tabs-demo {}
+  .tab-nav { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .tab-btn {
+    padding: 7px 14px; font-size: 11px;
+    font-family: var(--font-mono);
+    background: none; border: none;
+    color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; font-size: 12px; color: var(--muted); }
+  .tab-panel.active { display: block; }
+
+  /* 10. Progress bar */
+  .progress-demo { display: flex; flex-direction: column; gap: 10px; }
+  .progress-row { display: flex; flex-direction: column; gap: 4px; }
+  .progress-label { font-size: 10px; color: var(--muted); display: flex; justify-content: space-between; }
+  .progress-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .fill-green { background: var(--accent); }
+  .fill-blue { background: var(--accent2); }
+  .fill-pink { background: var(--accent4); }
+
+  /* =========== BACKEND DEMOS =========== */
+
+  /* Auth flow */
+  .auth-flow { display: flex; flex-direction: column; gap: 6px; }
+  .auth-step {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    font-size: 11px;
+  }
+  .auth-icon { font-size: 14px; width: 22px; text-align: center; }
+  .auth-arrow { color: var(--muted); font-size: 10px; margin-left: auto; }
+
+  /* API endpoint */
+  .api-demo { display: flex; flex-direction: column; gap: 6px; }
+  .api-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface2); border-radius: 6px; padding: 8px 12px;
+    font-size: 11px;
+  }
+  .method {
+    font-weight: 500; font-size: 10px; padding: 2px 7px;
+    border-radius: 3px; min-width: 44px; text-align: center;
+  }
+  .get { background: rgba(91,156,246,0.15); color: var(--accent2); }
+  .post { background: rgba(126,232,162,0.15); color: var(--accent); }
+  .del { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .put { background: rgba(245,158,11,0.15); color: var(--accent3); }
+  .api-path { color: var(--muted); font-family: var(--font-mono); }
+  .api-badge { margin-left: auto; font-size: 9px; color: var(--muted); }
+
+  /* Rate limiting */
+  .rate-demo { display: flex; flex-direction: column; gap: 8px; }
+  .rate-meter { background: var(--surface2); border-radius: 8px; padding: 12px; }
+  .rate-header { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .rate-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .rate-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent3)); transition: width 0.5s; }
+  .rate-stats { display: flex; gap: 12px; margin-top: 8px; }
+  .rate-stat { font-size: 10px; color: var(--muted); }
+  .rate-stat strong { color: var(--text); }
+
+  /* Queue */
+  .queue-demo { display: flex; flex-direction: column; gap: 6px; }
+  .queue-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    font-size: 11px;
+  }
+  .q-status { width: 8px; height: 8px; border-radius: 50%; }
+  .q-done { background: var(--accent); }
+  .q-running { background: var(--accent3); animation: pulse 1s infinite; }
+  .q-pending { background: var(--border); }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .q-label { flex: 1; }
+  .q-time { color: var(--muted); font-size: 10px; }
+
+  /* Caching */
+  .cache-demo { display: flex; flex-direction: column; gap: 6px; font-size: 11px; }
+  .cache-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: var(--surface2); border-radius: 6px;
+  }
+  .cache-hit { color: var(--accent); font-weight: 500; min-width: 28px; }
+  .cache-miss { color: #ef4444; font-weight: 500; min-width: 28px; }
+  .cache-key { color: var(--muted); flex: 1; font-family: var(--font-mono); }
+  .cache-ms { color: var(--muted); font-size: 10px; }
+
+  /* Role-based access */
+  .rbac-demo { display: flex; flex-direction: column; gap: 6px; font-size: 11px; }
+  .rbac-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface2); border-radius: 6px; }
+  .rbac-role { min-width: 64px; font-size: 10px; padding: 2px 7px; border-radius: 20px; text-align: center; }
+  .role-admin { background: rgba(244,114,182,0.15); color: var(--accent4); }
+  .role-editor { background: rgba(245,158,11,0.15); color: var(--accent3); }
+  .role-viewer { background: rgba(91,156,246,0.15); color: var(--accent2); }
+  .rbac-perms { display: flex; gap: 4px; flex-wrap: wrap; }
+  .perm { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: var(--border); color: var(--muted); }
+  .perm.allow { background: rgba(126,232,162,0.1); color: var(--accent); }
+
+  /* Webhook */
+  .webhook-demo { display: flex; flex-direction: column; gap: 6px; font-size: 11px; }
+  .webhook-event {
+    background: var(--surface2); border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .webhook-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .webhook-type { color: var(--accent3); font-size: 10px; }
+  .webhook-time { color: var(--muted); font-size: 10px; }
+  .webhook-payload { background: var(--bg); border-radius: 4px; padding: 6px 8px; font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding: 24px 40px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--muted);
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* Drag and drop */
+  .dnd-area {
+    min-height: 70px;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 11px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .dnd-area.drag-over { border-color: var(--accent); background: rgba(126,232,162,0.05); color: var(--accent); }
+  .dnd-files { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .dnd-file { display: flex; justify-content: space-between; background: var(--surface2); padding: 6px 10px; border-radius: 4px; font-size: 11px; color: var(--muted); }
+
+  /* Search autocomplete */
+  .search-wrap { position: relative; }
+  .search-input {
+    width: 100%; padding: 8px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text);
+    font-family: var(--font-mono); font-size: 12px;
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .autocomplete-list {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+    display: none; z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .autocomplete-list.show { display: block; }
+  .autocomplete-item {
+    padding: 8px 12px; font-size: 11px;
+    cursor: pointer; transition: background 0.15s;
+    color: var(--muted);
+  }
+  .autocomplete-item:hover { background: var(--border); color: var(--text); }
+  .autocomplete-item mark { background: none; color: var(--accent); font-weight: 600; }
+
+  /* =========== NAV DRAWER =========== */
+  .drawer-trigger {
+    position: fixed;
+    top: 20px; left: 20px;
+    z-index: 500;
+    width: 40px; height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+    transition: border-color 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .drawer-trigger:hover { border-color: var(--accent); }
+  .drawer-trigger.open { border-color: var(--accent); background: rgba(126,232,162,0.06); }
+  .hamburger-bar {
+    width: 18px; height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s, width 0.3s;
+    transform-origin: center;
+  }
+  .drawer-trigger.open .hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .drawer-trigger.open .hamburger-bar:nth-child(2) { opacity: 0; width: 0; }
+  .drawer-trigger.open .hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .drawer-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(3px);
+    z-index: 600;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .drawer-backdrop.open { opacity: 1; pointer-events: all; }
+
+  .drawer-panel {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    z-index: 700;
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .drawer-panel.open { transform: translateX(0); }
+
+  .drawer-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .drawer-logo { font-family: var(--font-head); font-size: 14px; font-weight: 800; letter-spacing: -0.01em; }
+  .drawer-logo span { color: var(--accent); }
+  .drawer-close {
+    width: 28px; height: 28px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--muted);
+    transition: all 0.2s;
+  }
+  .drawer-close:hover { border-color: var(--text); color: var(--text); }
+
+  .drawer-section-label {
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 16px 20px 6px;
+  }
+  .drawer-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    font-size: 12px; color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .drawer-nav-item:hover { background: var(--surface2); color: var(--text); border-left-color: var(--border); }
+  .drawer-nav-item.active { color: var(--accent); background: rgba(126,232,162,0.06); border-left-color: var(--accent); }
+  .drawer-nav-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .drawer-nav-badge {
+    margin-left: auto; font-size: 9px;
+    padding: 1px 6px; border-radius: 10px;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .drawer-nav-badge.new { background: rgba(126,232,162,0.1); color: var(--accent); border-color: rgba(126,232,162,0.3); }
+  .drawer-divider { height: 1px; background: var(--border); margin: 8px 20px; }
+  .drawer-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .drawer-user { display: flex; align-items: center; gap: 10px; }
+  .drawer-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #0c0c10; flex-shrink: 0;
+  }
+  .drawer-user-info { display: flex; flex-direction: column; gap: 1px; }
+  .drawer-user-name { font-size: 12px; color: var(--text); font-family: var(--font-head); font-weight: 600; }
+  .drawer-user-role { font-size: 10px; color: var(--muted); }
+  .drawer-callout {
+    margin: 4px 20px;
+    padding: 7px 10px;
+    background: rgba(91,156,246,0.06);
+    border: 1px solid rgba(91,156,246,0.2);
+    border-radius: 6px;
+    font-size: 10px; color: var(--accent2); line-height: 1.5;
+  }
+
+  /* =========== HTTPS LIFECYCLE TAB =========== */
+  #tab-https { padding: 0; }
+
+  /* ── URL Bar ── */
+  .https-urlbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 20px 40px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-wrap: wrap; gap: 10px;
+  }
+  .urlbar-lock { font-size: 16px; flex-shrink: 0; }
+  .urlbar-input {
+    flex: 1; min-width: 200px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 7px 12px;
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--text); outline: none;
+  }
+  .urlbar-input:focus { border-color: var(--accent2); }
+  .urlbar-select {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 7px 10px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text); outline: none; cursor: pointer;
+  }
+  .urlbar-send {
+    padding: 7px 18px;
+    background: rgba(91,156,246,0.12);
+    border: 1px solid rgba(91,156,246,0.35);
+    color: var(--accent2); border-radius: 6px;
+    font-family: var(--font-mono); font-size: 12px;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .urlbar-send:hover { background: rgba(91,156,246,0.22); }
+  .urlbar-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── Main layout ── */
+  .https-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 500px; }
+  .https-left { padding: 24px 40px; border-right: 1px solid var(--border); }
+  .https-right { padding: 24px 40px; }
+
+  /* ── Phase pipeline ── */
+  .phase-label {
+    font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .phase-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .phase-row {
+    display: flex; align-items: stretch; gap: 0;
+    position: relative;
+  }
+  .phase-connector {
+    display: flex; flex-direction: column; align-items: center;
+    width: 32px; flex-shrink: 0; padding: 4px 0;
+  }
+  .phase-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    transition: all 0.3s; flex-shrink: 0; z-index: 1;
+  }
+  .phase-dot.active { border-color: var(--accent2); background: var(--accent2); box-shadow: 0 0 8px rgba(91,156,246,0.5); }
+  .phase-dot.done { border-color: var(--accent); background: var(--accent); }
+  .phase-dot.error { border-color: #ef4444; background: #ef4444; }
+  .phase-line {
+    width: 2px; flex: 1; background: var(--border);
+    transition: background 0.3s; min-height: 20px;
+  }
+  .phase-line.done { background: var(--accent); }
+  .phase-line.active { background: linear-gradient(to bottom, var(--accent), var(--border)); }
+
+  .phase-content {
+    flex: 1; padding: 6px 0 16px 10px;
+  }
+  .phase-title {
+    font-family: var(--font-head); font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+  }
+  .phase-ms {
+    font-size: 10px; color: var(--muted);
+    font-family: var(--font-mono); margin-left: auto;
+    transition: color 0.3s;
+  }
+  .phase-ms.done { color: var(--accent); }
+  .phase-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
+  .phase-detail {
+    margin-top: 6px; background: var(--surface2);
+    border-radius: 4px; padding: 6px 8px;
+    font-size: 10px; font-family: var(--font-mono);
+    color: var(--muted); display: none;
+  }
+  .phase-detail.show { display: block; }
+
+  /* ── Timing bar ── */
+  .timing-wrap { margin-top: 16px; }
+  .timing-track { height: 28px; background: var(--surface2); border-radius: 6px; overflow: hidden; position: relative; }
+  .timing-segment {
+    position: absolute; top: 4px; height: 20px;
+    border-radius: 3px; font-size: 9px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(0,0,0,0.7); font-weight: 600;
+    transition: width 0.5s, left 0.5s; overflow: hidden;
+    white-space: nowrap;
+  }
+  .timing-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .timing-key { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--muted); }
+  .timing-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Request / Response panels ── */
+  .req-res-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .rr-tab {
+    padding: 5px 12px; font-size: 11px;
+    font-family: var(--font-mono); background: none;
+    border: 1px solid var(--border); color: var(--muted);
+    border-radius: 5px; cursor: pointer; transition: all 0.2s;
+  }
+  .rr-tab.active { border-color: var(--accent2); color: var(--accent2); background: rgba(91,156,246,0.08); }
+  .rr-panel { display: none; }
+  .rr-panel.active { display: block; }
+
+  .headers-block { display: flex; flex-direction: column; gap: 3px; }
+  .header-row {
+    display: flex; align-items: baseline; gap: 0;
+    font-size: 11px; font-family: var(--font-mono);
+    padding: 3px 8px; border-radius: 3px;
+    transition: background 0.15s;
+  }
+  .header-row:hover { background: var(--surface2); }
+  .header-name { color: var(--accent2); min-width: 160px; flex-shrink: 0; }
+  .header-val { color: var(--text); }
+  .header-val.muted { color: var(--muted); }
+
+  /* Status badge */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .status-2xx { background: rgba(126,232,162,0.12); color: var(--accent); border: 1px solid rgba(126,232,162,0.3); }
+  .status-3xx { background: rgba(91,156,246,0.12); color: var(--accent2); border: 1px solid rgba(91,156,246,0.3); }
+  .status-4xx { background: rgba(245,158,11,0.12); color: var(--accent3); border: 1px solid rgba(245,158,11,0.3); }
+  .status-5xx { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+  .body-block {
+    background: var(--surface2); border-radius: 6px; padding: 10px 12px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); line-height: 1.6; white-space: pre-wrap;
+    max-height: 160px; overflow-y: auto;
+  }
+  .json-key { color: var(--accent2); }
+  .json-str { color: var(--accent); }
+  .json-num { color: var(--accent3); }
+  .json-bool { color: var(--accent4); }
+  .json-null { color: var(--muted); }
+
+  /* ── Request log ── */
+  .log-wrap {
+    padding: 0 40px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .log-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 0 10px;
+  }
+  .log-title { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .log-clear {
+    margin-left: auto; font-size: 10px; color: var(--muted);
+    background: none; border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 8px; cursor: pointer;
+    font-family: var(--font-mono); transition: all 0.2s;
+  }
+  .log-clear:hover { color: var(--text); border-color: var(--text); }
+  .log-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .log-table th {
+    text-align: left; padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted); font-weight: 400;
+    letter-spacing: 0.1em; text-transform: uppercase; font-size: 9px;
+  }
+  .log-table td { padding: 7px 10px; border-bottom: 1px solid rgba(42,42,58,0.4); font-family: var(--font-mono); }
+  .log-table tr:last-child td { border-bottom: none; }
+  .log-table tr { animation: fadeIn 0.3s; }
+  .log-method { font-weight: 600; }
+  .log-status { font-weight: 600; }
+  .log-2xx { color: var(--accent); }
+  .log-3xx { color: var(--accent2); }
+  .log-4xx { color: var(--accent3); }
+  .log-5xx { color: #ef4444; }
+  .log-time { color: var(--muted); }
+
+  /* ── Error panel ── */
+  .error-panel {
+    display: none; margin: 0 40px 20px;
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .error-panel.show { display: block; animation: fadeIn 0.2s; }
+  .error-title { color: #ef4444; font-family: var(--font-head); font-size: 13px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .error-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+  .error-desc strong { color: var(--text); }
+  .error-retry {
+    margin-top: 10px; padding: 6px 14px;
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+    color: #ef4444; border-radius: 5px; font-family: var(--font-mono);
+    font-size: 11px; cursor: pointer; transition: all 0.2s;
+  }
+  .error-retry:hover { background: rgba(239,68,68,0.2); }
+
+  /* ── Spinner ── */
+  .spinner {
+    display: inline-block; width: 12px; height: 12px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent2);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+</style>
+</head>
+<body>
+
+<!-- ======= NAV DRAWER ======= -->
+<button class="drawer-trigger" id="drawerTrigger" onclick="toggleDrawer()"
+  data-tip="Hamburger trigger — fixed position, always accessible. Click to open the nav drawer.">
+  <div class="hamburger-bar"></div>
+  <div class="hamburger-bar"></div>
+  <div class="hamburger-bar"></div>
+</button>
+
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"
+  data-tip="Backdrop — semi-transparent overlay behind the drawer. Clicking it closes the drawer (tap-to-dismiss pattern)."></div>
+
+<div class="drawer-panel" id="drawerPanel">
+
+  <div class="drawer-header">
+    <div class="drawer-logo" data-tip="App logo / name — top of drawer, consistent branding anchor">Web<span>App</span></div>
+    <div class="drawer-close" onclick="closeDrawer()" data-tip="Explicit close button — always provide one in addition to the backdrop and ESC key">✕</div>
+  </div>
+
+  <div class="drawer-section-label" data-tip="Section label — groups related nav items visually without adding a nested menu level">Main</div>
+
+  <div class="drawer-nav-item active" data-tip="Active item — highlighted with accent color and left border. Tells the user where they are.">
+    <span class="drawer-nav-icon">⬛</span> Dashboard
+    <span class="drawer-nav-badge new">Live</span>
+  </div>
+  <div class="drawer-nav-item" data-tip="Standard nav item — icon + label. Icons aid scanning; labels ensure clarity.">
+    <span class="drawer-nav-icon">📊</span> Analytics
+  </div>
+  <div class="drawer-nav-item" data-tip="Nav item with a badge — the count or label draws attention to pending actions without leaving the page.">
+    <span class="drawer-nav-icon">🔔</span> Notifications
+    <span class="drawer-nav-badge">4</span>
+  </div>
+  <div class="drawer-nav-item" data-tip="Projects link — deep link to a filtered view. Nav items should be destinations, not actions.">
+    <span class="drawer-nav-icon">📁</span> Projects
+  </div>
+
+  <div class="drawer-divider" data-tip="Divider — thin rule separating logical groups. Use sparingly to avoid visual noise."></div>
+
+  <div class="drawer-section-label" data-tip="Secondary section — lower-priority items grouped separately from primary navigation">Settings</div>
+
+  <div class="drawer-nav-item" data-tip="Settings — typically last in the nav hierarchy. Users know to look at the bottom.">
+    <span class="drawer-nav-icon">⚙️</span> Settings
+  </div>
+  <div class="drawer-nav-item" data-tip="Docs link — external or internal. Opens in new tab for external, same tab for internal.">
+    <span class="drawer-nav-icon">📖</span> Documentation
+  </div>
+
+  <div class="drawer-callout" data-tip="This blue callout is for demo purposes — showing how in-drawer contextual hints or upgrade prompts are placed">
+    ← Hover items for callouts explaining each drawer element
+  </div>
+
+  <div class="drawer-footer">
+    <div class="drawer-user" data-tip="User profile row — fixed at the bottom of the drawer. Shows who is logged in and provides quick access to account settings.">
+      <div class="drawer-avatar" data-tip="Avatar — initials or photo. Generated from the user's name if no photo is uploaded.">JS</div>
+      <div class="drawer-user-info">
+        <div class="drawer-user-name" data-tip="Display name — pulled from the user profile record">Jane Smith</div>
+        <div class="drawer-user-role" data-tip="Role badge — reinforces RBAC context so users understand their permission level">Admin</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="hero">
+  <div class="hero-tag">Interactive Reference</div>
+  <h1>Web App <span>Features</span><br>Visual Guide</h1>
+  <p class="hero-sub">Hover any labeled element to learn what it does. Each demo shows a real, working example of the feature.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('frontend', this)">Frontend</button>
+  <button class="tab" onclick="switchTab('backend', this)">Backend</button>
+  <button class="tab" onclick="switchTab('https', this)">HTTPS Lifecycle</button>
+</div>
+
+<!-- ======= FRONTEND TAB ======= -->
+<div id="tab-frontend" class="content active">
+
+  <div class="section-label">UI & Layout</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="A nav drawer slides in from the left edge of the screen, triggered by the hamburger icon (☰). Also called off-canvas navigation or side drawer.">Nav Drawer</span>
+        <span class="demo-card-tag">Navigation</span>
+      </div>
+      <div class="demo-body" style="display:flex;flex-direction:column;gap:10px;">
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">The hamburger button <strong style="color:var(--text)">☰</strong> is fixed top-left on this page. Click it to open the full nav drawer demo — every element inside is labeled with a hover callout.</p>
+        <button class="modal-trigger" onclick="toggleDrawer()" data-tip="Opens the nav drawer. The trigger, backdrop, slide animation, active state, badges, user row, and close button are all demonstrated and annotated.">☰ Open Nav Drawer →</button>
+        <div style="font-size:10px;color:var(--muted);">Also try: ESC key to close · click backdrop to dismiss</div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Responsive design means the layout adapts to screen width using CSS flexbox/grid and media queries. Click the breakpoint buttons to simulate.">Responsive Layout</span>
+        <span class="demo-card-tag">Layout</span>
+      </div>
+      <div class="demo-body">
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <button class="bp-btn active" onclick="setBreakpoint('mobile', this)" data-tip="Mobile: single-column stacked layout. Each column takes full width.">📱 Mobile</button>
+          <button class="bp-btn" onclick="setBreakpoint('tablet', this)" data-tip="Tablet: two columns per row. The third wraps to a second row.">⬜ Tablet</button>
+          <button class="bp-btn" onclick="setBreakpoint('desktop', this)" data-tip="Desktop: all three columns side-by-side in one row.">🖥 Desktop</button>
+        </div>
+        <div class="responsive-demo" id="responsiveDemo">
+          <div class="res-col" data-tip="Content column — stacks vertically on mobile">Col 1</div>
+          <div class="res-col" data-tip="Content column — wraps on tablet, inline on desktop">Col 2</div>
+          <div class="res-col" data-tip="Content column — always last, moves to new row on mobile/tablet">Col 3</div>
+        </div>
+        <div style="margin-top:8px; font-size:10px; color:var(--muted)" id="bpLabel">Showing: Mobile — columns stacked vertically</div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Allows users to switch between light and dark color schemes. Saved to localStorage or user preferences.">Dark / Light Mode</span>
+        <span class="demo-card-tag">UX</span>
+      </div>
+      <div class="demo-body">
+        <div class="toggle-row">
+          <div class="toggle on" id="darkToggle" onclick="toggleDark()" data-tip="Click to toggle — adds/removes a 'light' class on <html>, swapping all CSS variables. Preference is saved to localStorage and restored on next visit.">
+            <div class="toggle-knob"></div>
+          </div>
+          <span class="toggle-label" id="toggleLabel">Dark mode ON</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Skeleton loaders show placeholder shapes while content is loading, reducing perceived wait time.">Skeleton / Loading State</span>
+        <span class="demo-card-tag">Performance</span>
+      </div>
+      <div class="demo-body">
+        <div class="skeleton-row">
+          <div class="skeleton" data-tip="Full-width placeholder for a headline or paragraph line"></div>
+          <div class="skeleton sm" data-tip="Shorter placeholder line — shows content will vary in length"></div>
+          <div class="skeleton xs" data-tip="A short label or subtext placeholder"></div>
+        </div>
+        <div style="margin-top:10px; font-size:10px; color:var(--muted)">The shimmer animation signals loading activity</div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Toast notifications are brief, non-blocking messages that appear at the edge of the screen to confirm actions or report errors.">Toast Notifications</span>
+        <span class="demo-card-tag ux">UX</span>
+      </div>
+      <div class="demo-body">
+        <div class="toast-demo">
+          <div class="toast success" data-tip="Success toast: confirms a completed action (e.g., 'File saved')"><span class="toast-icon">✓</span> Record saved successfully</div>
+          <div class="toast error" data-tip="Error toast: reports a failure. Auto-dismisses after 3–5 seconds"><span class="toast-icon">✕</span> Network request failed</div>
+          <div class="toast info" data-tip="Info toast: neutral informational message, often with a link"><span class="toast-icon">i</span> New version available</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Forms & Inputs</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Client-side form validation checks inputs before submitting to the server, giving instant feedback without a round-trip.">Form Validation</span>
+        <span class="demo-card-tag">Forms</span>
+      </div>
+      <div class="demo-body">
+        <div class="form-demo">
+          <div class="form-field">
+            <input class="form-input error" type="text" value="john" placeholder="Username" data-tip="Red border = validation error. The field value doesn't meet requirements.">
+            <span class="form-hint">Username must be at least 5 characters</span>
+          </div>
+          <div class="form-field">
+            <input class="form-input valid" type="email" value="john@example.com" placeholder="Email" data-tip="Green border = valid input. The field has passed all checks.">
+            <span class="form-hint valid">✓ Valid email address</span>
+          </div>
+          <div class="form-field">
+            <input class="form-input" type="password" placeholder="Password" data-tip="Neutral border = untouched/pristine field. Validation runs on blur or submit.">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Autocomplete / type-ahead narrows suggestions as the user types, reducing input errors and speeding up data entry.">Search Autocomplete</span>
+        <span class="demo-card-tag">Forms</span>
+      </div>
+      <div class="demo-body">
+        <div class="search-wrap">
+          <input class="search-input" type="text" id="searchInput" placeholder="Type to search…" oninput="handleSearch(this.value)" data-tip="Type a few characters to filter the suggestion list in real time.">
+          <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+        <div style="margin-top:8px; font-size:10px; color:var(--muted)">Try typing "auth", "cache", or "role"</div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Drag-and-drop file upload lets users drag files from the desktop into a drop zone instead of using a file picker dialog.">Drag & Drop Upload</span>
+        <span class="demo-card-tag">Forms</span>
+      </div>
+      <div class="demo-body">
+        <div class="dnd-area" id="dropZone"
+          data-tip="The browser dragenter/dragleave/drop events handle detection. Files are read with the FileReader API."
+          ondragover="event.preventDefault(); this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="handleDrop(event)">
+          ↓ Drop files here
+        </div>
+        <div class="dnd-files" id="droppedFiles"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Data Display</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Sortable, filterable data tables display records efficiently. Click column headers to sort. Pagination limits DOM size.">Sortable Data Table</span>
+        <span class="demo-card-tag">Data</span>
+      </div>
+      <div class="demo-body">
+        <div class="table-demo">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th onclick="sortTable(0)" data-tip="Click to sort alphabetically by name">Name ↕</th>
+                <th onclick="sortTable(1)" data-tip="Click to sort by status">Status ↕</th>
+                <th onclick="sortTable(2)" data-tip="Click to sort by numeric value">Score ↕</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Alice</td><td><span class="status-dot dot-green"></span>Active</td><td>98</td></tr>
+              <tr><td>Bob</td><td><span class="status-dot dot-yellow"></span>Pending</td><td>74</td></tr>
+              <tr><td>Carol</td><td><span class="status-dot dot-green"></span>Active</td><td>85</td></tr>
+              <tr><td>Dave</td><td><span class="status-dot dot-red"></span>Inactive</td><td>41</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Modal dialogs overlay the page to focus user attention on a single task. They trap keyboard focus for accessibility.">Modal Dialog</span>
+        <span class="demo-card-tag ux">UX</span>
+      </div>
+      <div class="demo-body" style="display:flex; flex-direction:column; gap:10px">
+        <p style="font-size:11px; color:var(--muted)">Modals block the background, require an explicit action (confirm/cancel), and should be used sparingly.</p>
+        <button class="modal-trigger" onclick="document.getElementById('modalOverlay').classList.add('open')" data-tip="Opens a modal with a backdrop blur. ESC key also closes it.">Open Modal →</button>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Tabs organize related content into panels. Only one panel is shown at a time, reducing visual clutter.">Tab Panels</span>
+        <span class="demo-card-tag">Navigation</span>
+      </div>
+      <div class="demo-body">
+        <div class="tabs-demo">
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchPanel('overview', this)" data-tip="Active tab — content is visible">Overview</button>
+            <button class="tab-btn" onclick="switchPanel('settings', this)" data-tip="Inactive tab — click to reveal panel">Settings</button>
+            <button class="tab-btn" onclick="switchPanel('history', this)" data-tip="Another tab panel">History</button>
+          </div>
+          <div id="panel-overview" class="tab-panel active">Dashboard overview: 3 active jobs, 2 alerts, last sync 4m ago.</div>
+          <div id="panel-settings" class="tab-panel">Settings panel: notifications, timezone, theme preferences.</div>
+          <div id="panel-history" class="tab-panel">History log: 14 events recorded in the past 24 hours.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Infinite scroll loads more items as the user scrolls down, avoiding full-page pagination reloads.">Infinite Scroll List</span>
+        <span class="demo-card-tag">Performance</span>
+      </div>
+      <div class="demo-body">
+        <div class="scroll-demo" id="scrollDemo" onscroll="handleScroll(this)">
+          <div class="scroll-item">Result #1 — API endpoint analysis <span class="scroll-badge">New</span></div>
+          <div class="scroll-item">Result #2 — Database migration log <span class="scroll-badge">Done</span></div>
+          <div class="scroll-item">Result #3 — Security audit report <span class="scroll-badge">Warn</span></div>
+          <div class="scroll-item">Result #4 — Rate limit event <span class="scroll-badge">Info</span></div>
+          <div class="scroll-item">Result #5 — Session token expiry <span class="scroll-badge">Done</span></div>
+          <div class="scroll-item" id="loadingMore" style="color:var(--accent); text-align:center; padding:10px">↓ Scroll to load more</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Progress bars give users feedback on how far through a process they are — uploads, onboarding steps, or skill levels.">Progress Bars</span>
+        <span class="demo-card-tag">Data</span>
+      </div>
+      <div class="demo-body">
+        <div class="progress-demo">
+          <div class="progress-row" data-tip="Security score — filled on page load via CSS transition">
+            <div class="progress-label"><span>Security Score</span><span>87%</span></div>
+            <div class="progress-track"><div class="progress-fill fill-green" style="width:87%"></div></div>
+          </div>
+          <div class="progress-row" data-tip="Upload progress — can be driven by XHR progress events">
+            <div class="progress-label"><span>Upload Progress</span><span>62%</span></div>
+            <div class="progress-track"><div class="progress-fill fill-blue" style="width:62%"></div></div>
+          </div>
+          <div class="progress-row" data-tip="Profile completion — guides users to fill out required fields">
+            <div class="progress-label"><span>Profile Complete</span><span>40%</span></div>
+            <div class="progress-track"><div class="progress-fill fill-pink" style="width:40%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Auth UI</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="The login form is the entry point to any authenticated app. Email + password is the baseline; OAuth buttons reduce friction significantly.">Login Form</span>
+        <span class="demo-card-tag ux">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="auth-form">
+          <div class="form-field">
+            <label class="auth-label" data-tip="Email field — always use type='email' for mobile keyboard and browser autofill support">Email</label>
+            <input class="form-input" type="email" value="jane@example.com" placeholder="you@example.com">
+          </div>
+          <div class="form-field">
+            <label class="auth-label" data-tip="Password field — use type='password' to mask input. Never store plaintext passwords.">Password</label>
+            <div class="pw-wrap">
+              <input class="form-input" type="password" id="loginPw" value="hunter2!" style="padding-right:36px">
+              <button class="pw-eye" onclick="togglePw('loginPw', this)" data-tip="Show/hide password toggle — improves usability on mobile where typos are common">👁</button>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+            <label style="font-size:10px; color:var(--muted); display:flex; gap:6px; align-items:center; cursor:pointer;" data-tip="Remember me — sets a longer-lived session cookie or refresh token">
+              <input type="checkbox" checked> Remember me
+            </label>
+            <span style="font-size:10px; color:var(--accent2); cursor:pointer;" data-tip="Forgot password link — triggers the reset flow (see Forgot Password card)">Forgot password?</span>
+          </div>
+          <button class="auth-submit" data-tip="Submit triggers client-side validation first, then a POST /auth/login request with credentials">Sign in</button>
+          <div class="auth-divider" data-tip="OAuth divider — allows signing in via a third-party provider without a password">or continue with</div>
+          <div style="display:flex; gap:8px;">
+            <button class="oauth-btn" data-tip="Google OAuth — redirects to Google's consent screen, returns an authorization code your server exchanges for a token">G Google</button>
+            <button class="oauth-btn" data-tip="GitHub OAuth — common for developer tools and B2B SaaS products">⌥ GitHub</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Sign up form collects the minimum info needed to create an account. Keep fields lean — ask for more details post-onboarding.">Sign Up Form</span>
+        <span class="demo-card-tag ux">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="auth-form">
+          <div class="form-field">
+            <label class="auth-label" data-tip="Full name — used in emails and UI greetings. Some apps split into first/last for personalization.">Full name</label>
+            <input class="form-input valid" type="text" value="Jane Smith" placeholder="Your name">
+          </div>
+          <div class="form-field">
+            <label class="auth-label" data-tip="Email becomes the unique identifier for the account. Check for duplicates server-side before INSERT.">Email</label>
+            <input class="form-input valid" type="email" value="jane@example.com" placeholder="you@example.com">
+          </div>
+          <div class="form-field">
+            <label class="auth-label" data-tip="Password — enforce a minimum strength requirement. Show a strength meter to guide the user (see card below).">Password</label>
+            <div class="pw-wrap">
+              <input class="form-input" type="password" id="signupPw" value="MyP@ss1!" style="padding-right:36px" oninput="updateStrength(this.value)">
+              <button class="pw-eye" onclick="togglePw('signupPw', this)" data-tip="Always include a show/hide toggle on sign-up — users are creating a new password and need to verify it">👁</button>
+            </div>
+            <div class="strength-bar-wrap" data-tip="Password strength meter — updates in real time as the user types">
+              <div class="strength-bar" id="strengthBar"></div>
+            </div>
+            <span class="strength-label" id="strengthLabel"></span>
+          </div>
+          <button class="auth-submit" data-tip="On submit: validate client-side, POST to /auth/register, hash password server-side (bcrypt/Argon2), send verification email">Create account</button>
+          <div style="font-size:10px; color:var(--muted); text-align:center; margin-top:4px;" data-tip="Terms of service acknowledgement — required for legal compliance. Often a checkbox; sometimes implied by the submit action.">By signing up you agree to the Terms of Service</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Password strength meter scores a password in real time and nudges users toward stronger choices before they submit.">Password Strength Meter</span>
+        <span class="demo-card-tag ux">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="auth-form">
+          <div class="form-field">
+            <label class="auth-label">Try a password</label>
+            <div class="pw-wrap">
+              <input class="form-input" type="text" id="strengthInput" placeholder="Type a password…" oninput="updateStrengthDemo(this.value)" style="padding-right:36px">
+            </div>
+            <div class="strength-bar-wrap" style="margin-top:8px;" data-tip="Four-segment bar — segments fill and change color as score increases">
+              <div class="strength-bar" id="strengthBarDemo"></div>
+            </div>
+            <span class="strength-label" id="strengthLabelDemo" style="margin-top:4px; display:block;"></span>
+          </div>
+          <div class="strength-rules" id="strengthRules">
+            <div class="rule" id="rule-len" data-tip="Minimum length — NIST recommends at least 8 chars, ideally 12+">○ 8+ characters</div>
+            <div class="rule" id="rule-upper" data-tip="Uppercase letter — adds character class diversity">○ Uppercase letter</div>
+            <div class="rule" id="rule-num" data-tip="Number — another character class check">○ Number</div>
+            <div class="rule" id="rule-sym" data-tip="Symbol — significantly increases entropy">○ Symbol (!@#…)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Forgot password flow lets users regain access without contacting support. Uses a time-limited, single-use reset token sent by email.">Forgot Password Flow</span>
+        <span class="demo-card-tag ux">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="fp-steps">
+          <div class="fp-step active" id="fp-step-1">
+            <div class="fp-step-label" data-tip="Step 1 — user enters their email. The server looks up the account but always returns a generic success message to prevent user enumeration.">Step 1 · Enter email</div>
+            <div class="auth-form" style="margin-top:10px;">
+              <input class="form-input" type="email" placeholder="you@example.com" value="jane@example.com">
+              <button class="auth-submit" style="margin-top:8px;" onclick="fpNext(2)" data-tip="Server generates a cryptographically random token, stores its hash with a 15-min TTL, and emails a reset link">Send reset link →</button>
+            </div>
+          </div>
+          <div class="fp-step" id="fp-step-2">
+            <div class="fp-step-label" data-tip="Step 2 — user receives an email with a link containing a one-time token: /reset-password?token=abc123. Token is validated server-side.">Step 2 · Check email</div>
+            <div style="margin-top:10px; background:var(--surface2); border-radius:6px; padding:12px; font-size:11px; color:var(--muted);">
+              <div style="color:var(--text); margin-bottom:4px;" data-tip="Email subject line — keep it clear and non-alarming">📧 Password reset link sent</div>
+              Check your inbox for a link valid for <strong style="color:var(--accent3)">15 minutes</strong>. <span style="color:var(--accent2); cursor:pointer;" onclick="fpNext(3)" data-tip="Simulate clicking the emailed link — navigates to the reset form">Click link in email →</span>
+            </div>
+          </div>
+          <div class="fp-step" id="fp-step-3">
+            <div class="fp-step-label" data-tip="Step 3 — token is validated from the URL. User sets a new password. Token is invalidated immediately after use.">Step 3 · Set new password</div>
+            <div class="auth-form" style="margin-top:10px;">
+              <div class="pw-wrap">
+                <input class="form-input" type="password" id="resetPw" placeholder="New password" style="padding-right:36px">
+                <button class="pw-eye" onclick="togglePw('resetPw', this)">👁</button>
+              </div>
+              <button class="auth-submit" style="margin-top:8px;" onclick="fpNext(4)" data-tip="Server verifies token hash, updates password hash, invalidates all existing sessions, redirects to login">Reset password →</button>
+            </div>
+          </div>
+          <div class="fp-step" id="fp-step-4">
+            <div style="text-align:center; padding:12px 0; font-size:12px;">
+              <div style="font-size:22px; margin-bottom:6px;">✓</div>
+              <div style="color:var(--accent); margin-bottom:4px;" data-tip="Confirmation — all existing sessions are invalidated after a password reset as a security measure">Password updated!</div>
+              <div style="color:var(--muted); font-size:10px; margin-bottom:10px;">All sessions have been signed out.</div>
+              <span style="color:var(--accent2); font-size:11px; cursor:pointer;" onclick="fpNext(1)">← Start over</span>
+            </div>
+          </div>
+        </div>
+        <div class="fp-dots">
+          <span class="fp-dot active" id="dot-1"></span>
+          <span class="fp-dot" id="dot-2"></span>
+          <span class="fp-dot" id="dot-3"></span>
+          <span class="fp-dot" id="dot-4"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======= BACKEND TAB ======= -->
+<div id="tab-backend" class="content">
+
+  <div class="section-label">Auth & Identity</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Authentication flow: the sequence of steps a user goes through to prove their identity. Ends with a session token or JWT.">Auth Flow</span>
+        <span class="demo-card-tag be">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="auth-flow">
+          <div class="auth-step" data-tip="Step 1: User submits credentials (email + password, or OAuth redirect)"><span class="auth-icon">📧</span> User submits credentials<span class="auth-arrow">→</span></div>
+          <div class="auth-step" data-tip="Step 2: Server hashes the password with bcrypt/Argon2 and checks against the stored hash"><span class="auth-icon">🔒</span> Password hash verified<span class="auth-arrow">→</span></div>
+          <div class="auth-step" data-tip="Step 3: If MFA is enabled, the user must provide a TOTP code from an authenticator app"><span class="auth-icon">📱</span> MFA code validated<span class="auth-arrow">→</span></div>
+          <div class="auth-step" data-tip="Step 4: Server issues a signed JWT or session cookie. Includes expiry (exp claim)."><span class="auth-icon">🎟️</span> JWT token issued<span class="auth-arrow">✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Role-Based Access Control (RBAC) grants users permissions based on their role rather than individually — Admin, Editor, Viewer, etc.">Role-Based Access (RBAC)</span>
+        <span class="demo-card-tag be">Auth</span>
+      </div>
+      <div class="demo-body">
+        <div class="rbac-demo">
+          <div class="rbac-row" data-tip="Admin role: full access — create, read, update, delete on all resources">
+            <span class="rbac-role role-admin">Admin</span>
+            <div class="rbac-perms">
+              <span class="perm allow">create</span><span class="perm allow">read</span><span class="perm allow">update</span><span class="perm allow">delete</span>
+            </div>
+          </div>
+          <div class="rbac-row" data-tip="Editor role: can read and modify content but cannot delete records or manage users">
+            <span class="rbac-role role-editor">Editor</span>
+            <div class="rbac-perms">
+              <span class="perm">create</span><span class="perm allow">read</span><span class="perm allow">update</span><span class="perm">delete</span>
+            </div>
+          </div>
+          <div class="rbac-row" data-tip="Viewer role: read-only access — can see data but cannot modify anything">
+            <span class="rbac-role role-viewer">Viewer</span>
+            <div class="rbac-perms">
+              <span class="perm">create</span><span class="perm allow">read</span><span class="perm">update</span><span class="perm">delete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">API Design</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="REST API endpoints use HTTP verbs (GET, POST, PUT, DELETE) to indicate the intended operation on a resource.">REST API Endpoints</span>
+        <span class="demo-card-tag be">API</span>
+      </div>
+      <div class="demo-body">
+        <div class="api-demo">
+          <div class="api-row" data-tip="GET /users — Retrieve a list of all users. Supports ?page=&limit= for pagination."><span class="method get">GET</span><span class="api-path">/api/v1/users</span><span class="api-badge">200 OK</span></div>
+          <div class="api-row" data-tip="POST /users — Create a new user. Body contains JSON payload. Returns 201 Created."><span class="method post">POST</span><span class="api-path">/api/v1/users</span><span class="api-badge">201 Created</span></div>
+          <div class="api-row" data-tip="PUT /users/:id — Replace an entire user record. PATCH would update only specified fields."><span class="method put">PUT</span><span class="api-path">/api/v1/users/:id</span><span class="api-badge">200 OK</span></div>
+          <div class="api-row" data-tip="DELETE /users/:id — Remove a user. Often uses soft-delete (sets deleted_at) rather than actual removal."><span class="method del">DEL</span><span class="api-path">/api/v1/users/:id</span><span class="api-badge">204 No Content</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Rate limiting caps how many requests a client can make per time window. Prevents abuse and DoS attacks.">Rate Limiting</span>
+        <span class="demo-card-tag be">Security</span>
+      </div>
+      <div class="demo-body">
+        <div class="rate-demo">
+          <div class="rate-meter" data-tip="This shows a sliding window rate limit: 78 of 100 allowed requests used in the current 1-minute window.">
+            <div class="rate-header">
+              <span>Requests / 60s window</span>
+              <span id="rateCount">78 / 100</span>
+            </div>
+            <div class="rate-bar-track"><div class="rate-bar-fill" id="rateBar" style="width:78%"></div></div>
+            <div class="rate-stats">
+              <div class="rate-stat">Remaining: <strong id="rateRemaining">22</strong></div>
+              <div class="rate-stat">Resets in: <strong id="rateReset">47s</strong></div>
+            </div>
+          </div>
+          <div style="font-size:10px; color:var(--muted); margin-top:4px">Header: <code style="color:var(--accent2)">X-RateLimit-Remaining: 22</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Webhooks notify external services when events occur in your app. Your server POSTs a JSON payload to a registered URL.">Webhooks</span>
+        <span class="demo-card-tag be">API</span>
+      </div>
+      <div class="demo-body">
+        <div class="webhook-demo">
+          <div class="webhook-event" data-tip="Event: user.created — fired when a new account is registered. The payload includes the new user object.">
+            <div class="webhook-top">
+              <span class="webhook-type">user.created</span>
+              <span class="webhook-time">2ms ago</span>
+            </div>
+            <div class="webhook-payload">POST → https://your-app.com/hooks<br>{"event":"user.created","id":"u_891"}</div>
+          </div>
+          <div class="webhook-event" data-tip="Event: payment.succeeded — fired by Stripe or your payment processor when a charge completes.">
+            <div class="webhook-top">
+              <span class="webhook-type">payment.succeeded</span>
+              <span class="webhook-time">14s ago</span>
+            </div>
+            <div class="webhook-payload">POST → https://your-app.com/hooks<br>{"event":"payment.succeeded","amount":4900}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Data & Infrastructure</div>
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="A cache layer (Redis, Memcached) stores frequently requested data in memory to avoid expensive database queries on every request.">Cache Layer</span>
+        <span class="demo-card-tag be">Performance</span>
+      </div>
+      <div class="demo-body">
+        <div class="cache-demo">
+          <div class="cache-row" data-tip="Cache HIT: the value was found in Redis. Returns in <1ms vs ~20ms for a DB query."><span class="cache-hit">HIT</span><span class="cache-key">user:profile:u_891</span><span class="cache-ms">0.4ms</span></div>
+          <div class="cache-row" data-tip="Cache HIT: dashboard stats served from cache. TTL set to 30 seconds for freshness."><span class="cache-hit">HIT</span><span class="cache-key">dashboard:stats:org_4</span><span class="cache-ms">0.2ms</span></div>
+          <div class="cache-row" data-tip="Cache MISS: key not found. Falls through to database query, then caches the result for next time."><span class="cache-miss">MISS</span><span class="cache-key">report:q3:export</span><span class="cache-ms">24ms (DB)</span></div>
+          <div class="cache-row" data-tip="Cache HIT: session token found in Redis. Used for fast auth validation on every request."><span class="cache-hit">HIT</span><span class="cache-key">session:tok_xkz991</span><span class="cache-ms">0.3ms</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="Background job queues decouple slow tasks (email sending, report generation) from the HTTP request cycle.">Background Job Queue</span>
+        <span class="demo-card-tag be">Infrastructure</span>
+      </div>
+      <div class="demo-body">
+        <div class="queue-demo">
+          <div class="queue-item" data-tip="Completed job: email sent successfully. Removed from active queue, logged in job history."><span class="q-status q-done"></span><span class="q-label">send_welcome_email:u_891</span><span class="q-time">done 2s</span></div>
+          <div class="queue-item" data-tip="Running job: currently being processed by a worker. The blinking indicator shows active execution."><span class="q-status q-running"></span><span class="q-label">generate_pdf_report:r_204</span><span class="q-time">running…</span></div>
+          <div class="queue-item" data-tip="Pending job: waiting in queue. Will be picked up by the next available worker process."><span class="q-status q-pending"></span><span class="q-label">send_invoice_email:inv_558</span><span class="q-time">queued</span></div>
+          <div class="queue-item" data-tip="Pending job: scheduled for batch processing. Cron-triggered jobs also appear here."><span class="q-status q-pending"></span><span class="q-label">sync_analytics_daily</span><span class="q-time">queued</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Database</div>
+  <div class="demo-grid">
+
+    <div class="demo-card" style="grid-column: span 2;">
+      <div class="demo-card-header">
+        <span class="demo-card-title" data-tip="A database schema defines the tables, columns, types, and relationships that structure your application's data. Click a table to inspect it.">Table / Schema Viewer</span>
+        <span class="demo-card-tag be">Database</span>
+      </div>
+      <div class="demo-body">
+        <div class="schema-layout">
+          <div class="schema-tables">
+            <div class="schema-table active" onclick="selectTable('users')" id="st-users" data-tip="users table — core identity table. Every other table with user data references this via foreign key.">
+              <span class="schema-table-icon">🗄</span> users
+              <span class="schema-row-count">12.4k rows</span>
+            </div>
+            <div class="schema-table" onclick="selectTable('sessions')" id="st-sessions" data-tip="sessions table — stores active login sessions. Rows expire after inactivity timeout.">
+              <span class="schema-table-icon">🗄</span> sessions
+              <span class="schema-row-count">3.1k rows</span>
+            </div>
+            <div class="schema-table" onclick="selectTable('posts')" id="st-posts" data-tip="posts table — has a foreign key to users. One user can have many posts (one-to-many relationship).">
+              <span class="schema-table-icon">🗄</span> posts
+              <span class="schema-row-count">84.7k rows</span>
+            </div>
+            <div class="schema-table" onclick="selectTable('tags')" id="st-tags" data-tip="tags table — linked via a join table (post_tags) for a many-to-many relationship with posts.">
+              <span class="schema-table-icon">🗄</span> tags
+              <span class="schema-row-count">248 rows</span>
+            </div>
+          </div>
+          <div class="schema-detail" id="schemaDetail"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======= HTTPS LIFECYCLE TAB ======= -->
+<div id="tab-https" class="content">
+
+  <!-- URL Bar -->
+  <div class="https-urlbar">
+    <span class="urlbar-lock" id="urlLock" data-tip="Padlock icon — shows the browser has verified the server certificate and the connection is encrypted with TLS">🔒</span>
+    <input class="urlbar-input" id="urlInput" value="https://api.example.com/users/42" data-tip="Request URL — the protocol (https://), host, path, and optional query string. Everything before ? is the path; after ? are query params.">
+    <select class="urlbar-select" id="methodSelect" data-tip="HTTP method — GET retrieves data, POST creates, PUT/PATCH updates, DELETE removes. The method is part of the request line.">
+      <option>GET</option>
+      <option>POST</option>
+      <option>PUT</option>
+      <option>DELETE</option>
+    </select>
+    <select class="urlbar-select" id="scenarioSelect" data-tip="Scenario selector — simulate different server responses to see how each status code affects the lifecycle.">
+      <option value="200">200 OK</option>
+      <option value="201">201 Created</option>
+      <option value="301">301 Redirect</option>
+      <option value="401">401 Unauthorized</option>
+      <option value="403">403 Forbidden</option>
+      <option value="404">404 Not Found</option>
+      <option value="429">429 Too Many Requests</option>
+      <option value="500">500 Server Error</option>
+      <option value="503">503 Unavailable</option>
+    </select>
+    <button class="urlbar-send" id="sendBtn" onclick="runLifecycle()" data-tip="Send — triggers the simulated full HTTPS lifecycle: DNS → TCP → TLS → Request → Response">▶ Send</button>
+  </div>
+
+  <!-- Error panel -->
+  <div class="error-panel" id="errorPanel">
+    <div class="error-title" id="errorTitle">⚠ Error</div>
+    <div class="error-desc" id="errorDesc"></div>
+    <button class="error-retry" onclick="runLifecycle()" id="retryBtn" style="display:none">↺ Retry request</button>
+  </div>
+
+  <!-- Main two-column layout -->
+  <div class="https-body">
+
+    <!-- LEFT: Phase pipeline + timing -->
+    <div class="https-left">
+      <div class="phase-label">Connection Phases</div>
+      <div class="pipeline" id="pipeline">
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-dns" data-tip="DNS resolution — browser checks its cache first, then queries the OS resolver, then a recursive DNS server to convert the hostname to an IP address."></div>
+            <div class="phase-line" id="line-dns"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              DNS Resolution
+              <span class="phase-ms" id="ms-dns"></span>
+            </div>
+            <div class="phase-desc" data-tip="Only happens on first visit or after TTL expiry. Subsequent requests reuse the cached IP.">Hostname → IP address lookup</div>
+            <div class="phase-detail" id="detail-dns">example.com → 93.184.216.34
+TTL: 300s · Resolver: 8.8.8.8</div>
+          </div>
+        </div>
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-tcp" data-tip="TCP 3-way handshake — SYN → SYN-ACK → ACK. Establishes a reliable connection before any data is sent. Takes one round-trip."></div>
+            <div class="phase-line" id="line-tcp"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              TCP Handshake
+              <span class="phase-ms" id="ms-tcp"></span>
+            </div>
+            <div class="phase-desc" data-tip="SYN → SYN-ACK → ACK. Adds one full round-trip of latency before any data moves.">SYN → SYN-ACK → ACK</div>
+            <div class="phase-detail" id="detail-tcp">Client SYN → Server SYN-ACK → Client ACK
+Connection established on port 443</div>
+          </div>
+        </div>
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-tls" data-tip="TLS handshake — client and server negotiate cipher suites, exchange certificates, and derive session keys. TLS 1.3 does this in 1 round-trip."></div>
+            <div class="phase-line" id="line-tls"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              TLS Handshake
+              <span class="phase-ms" id="ms-tls"></span>
+            </div>
+            <div class="phase-desc" data-tip="Certificate verified, cipher suite negotiated, session keys derived. TLS 1.3 reduces this to 1-RTT (one round trip).">Certificate verify · Key exchange</div>
+            <div class="phase-detail" id="detail-tls">Protocol: TLS 1.3
+Cipher: AES-256-GCM-SHA384
+Cert: *.example.com (valid)</div>
+          </div>
+        </div>
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-req" data-tip="HTTP Request sent — method, URL, headers, and optional body are serialised and sent over the encrypted TLS tunnel."></div>
+            <div class="phase-line" id="line-req"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              Request Sent
+              <span class="phase-ms" id="ms-req"></span>
+            </div>
+            <div class="phase-desc" data-tip="The full HTTP request — start line, headers, blank line, body — is sent as bytes over the TLS tunnel.">Headers + body encrypted and sent</div>
+            <div class="phase-detail" id="detail-req"></div>
+          </div>
+        </div>
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-ttfb" data-tip="TTFB — Time To First Byte. Measures server processing time: routing, auth checks, DB queries, serialisation. A high TTFB means a slow backend."></div>
+            <div class="phase-line" id="line-ttfb"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              TTFB
+              <span class="phase-ms" id="ms-ttfb"></span>
+            </div>
+            <div class="phase-desc" data-tip="Time To First Byte — the gap between request sent and first byte of response received. Reflects server processing time.">Server processing · First byte received</div>
+            <div class="phase-detail" id="detail-ttfb">Auth check: ~2ms
+DB query: ~8ms
+Serialise: ~1ms</div>
+          </div>
+        </div>
+
+        <div class="phase-row">
+          <div class="phase-connector">
+            <div class="phase-dot" id="dot-dl" data-tip="Content download — response body transferred over the connection. Duration depends on payload size and available bandwidth."></div>
+            <div class="phase-line" id="line-dl" style="display:none"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-title">
+              Content Download
+              <span class="phase-ms" id="ms-dl"></span>
+            </div>
+            <div class="phase-desc" data-tip="Response body received in full. For large payloads or slow connections, streaming (chunked transfer encoding) is used instead.">Response body received</div>
+            <div class="phase-detail" id="detail-dl"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Timing bar -->
+      <div class="timing-wrap" id="timingWrap" style="display:none">
+        <div class="phase-label" style="margin-top:16px">Waterfall Timing</div>
+        <div class="timing-track" id="timingTrack" data-tip="Waterfall chart — each segment shows what fraction of total time each phase took. Mirrors the Network tab in Chrome DevTools."></div>
+        <div class="timing-legend">
+          <div class="timing-key"><div class="timing-swatch" style="background:#a78bfa"></div>DNS</div>
+          <div class="timing-key"><div class="timing-swatch" style="background:#60a5fa"></div>TCP</div>
+          <div class="timing-key"><div class="timing-swatch" style="background:#34d399"></div>TLS</div>
+          <div class="timing-key"><div class="timing-swatch" style="background:#fbbf24"></div>Request</div>
+          <div class="timing-key"><div class="timing-swatch" style="background:#f472b6"></div>TTFB</div>
+          <div class="timing-key"><div class="timing-swatch" style="background:#7ee8a2"></div>Download</div>
+        </div>
+        <div style="margin-top:8px; font-size:10px; color:var(--muted)" id="totalTime"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Request / Response inspector -->
+    <div class="https-right">
+      <div class="phase-label">Inspector</div>
+      <div class="req-res-tabs">
+        <button class="rr-tab active" onclick="switchRR('request', this)" data-tip="Request panel — shows the outgoing HTTP message: method, URL, headers, and body.">Request</button>
+        <button class="rr-tab" onclick="switchRR('response', this)" data-tip="Response panel — shows the server's reply: status code, headers, and response body.">Response</button>
+      </div>
+
+      <!-- Request panel -->
+      <div class="rr-panel active" id="rr-request">
+        <div class="headers-block" id="reqHeaders">
+          <div style="font-size:11px;color:var(--muted);padding:20px 0;text-align:center">Press ▶ Send to inspect</div>
+        </div>
+      </div>
+
+      <!-- Response panel -->
+      <div class="rr-panel" id="rr-response">
+        <div id="statusBadge"></div>
+        <div class="headers-block" id="resHeaders">
+          <div style="font-size:11px;color:var(--muted);padding:20px 0;text-align:center">Press ▶ Send to inspect</div>
+        </div>
+        <div style="margin-top:12px; font-size:10px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px" id="bodyLabel" style="display:none">Response Body</div>
+        <div class="body-block" id="resBody" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request log -->
+  <div class="log-wrap">
+    <div class="log-header">
+      <span class="log-title" data-tip="Request log — persistent history of all simulated requests this session, like the Network panel in DevTools">Request Log</span>
+      <button class="log-clear" onclick="clearLog()" data-tip="Clear log — wipes the request history">Clear</button>
+    </div>
+    <table class="log-table" id="logTable">
+      <thead>
+        <tr>
+          <th>#</th><th>Method</th><th>URL</th><th>Status</th><th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="logBody">
+        <tr><td colspan="5" style="color:var(--muted);text-align:center;padding:14px">No requests yet</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <div class="modal-title" data-tip="Modal title: short, action-oriented (e.g., 'Confirm deletion')">Confirm Action</div>
+    <div class="modal-body" data-tip="Modal body: concise explanation of what will happen and any irreversible consequences">This action cannot be undone. Are you sure you want to proceed? All associated records will be permanently removed from the system.</div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="document.getElementById('modalOverlay').classList.remove('open')" data-tip="Cancel button: always give users an escape hatch">Cancel</button>
+      <button class="btn-primary" onclick="document.getElementById('modalOverlay').classList.remove('open')" data-tip="Confirm button: destructive actions should use red, safe actions use primary color">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Web App Features — Interactive Guide · Hover any element for callouts</span>
+  <span>Deployable to <a href="https://pages.github.com" target="_blank">GitHub Pages</a> — single HTML file, zero dependencies</span>
+</footer>
+
+<script>
+// ── TOOLTIP ENGINE ──────────────────────────────────────────────
+// Appended to <body> so it escapes any overflow:hidden ancestors
+const tip = document.createElement('div');
+tip.id = 'tooltip';
+document.body.appendChild(tip);
+
+const arrow = document.createElement('div');
+arrow.id = 'tooltip-arrow';
+document.body.appendChild(arrow);
+
+let hideTimer;
+
+function showTip(el) {
+  const text = el.getAttribute('data-tip');
+  if (!text) return;
+  clearTimeout(hideTimer);
+  tip.textContent = text;
+  tip.classList.remove('visible');
+  arrow.classList.remove('visible');
+
+  // Position after paint so dimensions are correct
+  requestAnimationFrame(() => {
+    const r = el.getBoundingClientRect();
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    const margin = 10;
+
+    // Prefer above; fall back to below if not enough room
+    let top, arrowTop, arrowDir;
+    if (r.top - th - 12 >= margin) {
+      top = r.top - th - 12;
+      arrowTop = r.top - 12;
+      arrowDir = 'down';
+    } else {
+      top = r.bottom + 12;
+      arrowTop = r.bottom + 2;
+      arrowDir = 'up';
+    }
+
+    // Center horizontally on element, clamp to viewport
+    let left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(margin, Math.min(left, window.innerWidth - tw - margin));
+
+    tip.style.top  = top + 'px';
+    tip.style.left = left + 'px';
+
+    // Arrow
+    const arrowLeft = Math.min(
+      Math.max(r.left + r.width / 2 - 5, left + 8),
+      left + tw - 18
+    );
+    arrow.style.left = arrowLeft + 'px';
+    arrow.style.top  = arrowTop + 'px';
+
+    const borderColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--border').trim();
+    if (arrowDir === 'down') {
+      arrow.style.borderTopColor = borderColor;
+      arrow.style.borderBottomColor = 'transparent';
+    } else {
+      arrow.style.borderTopColor = 'transparent';
+      arrow.style.borderBottomColor = borderColor;
+    }
+
+    tip.classList.add('visible');
+    arrow.classList.add('visible');
+  });
+}
+
+function hideTip() {
+  hideTimer = setTimeout(() => {
+    tip.classList.remove('visible');
+    arrow.classList.remove('visible');
+  }, 80);
+}
+
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest('[data-tip]');
+  if (el) showTip(el);
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest('[data-tip]')) hideTip();
+});
+document.addEventListener('scroll', hideTip, true);
+// ────────────────────────────────────────────────────────────────
+// Password show/hide
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+// Password strength (signup card)
+function updateStrength(val) {
+  const bar = document.getElementById('strengthBar');
+  const lbl = document.getElementById('strengthLabel');
+  const { pct, color, text } = scorePassword(val);
+  bar.style.width = pct + '%';
+  bar.style.background = color;
+  lbl.textContent = val ? text : '';
+  lbl.style.color = color;
+}
+
+// Password strength (standalone demo card)
+function updateStrengthDemo(val) {
+  const bar = document.getElementById('strengthBarDemo');
+  const lbl = document.getElementById('strengthLabelDemo');
+  const { pct, color, text } = scorePassword(val);
+  bar.style.width = pct + '%';
+  bar.style.background = color;
+  lbl.textContent = val ? text : '';
+  lbl.style.color = color;
+  // Update rules
+  const rules = [
+    { id: 'rule-len',   pass: val.length >= 8 },
+    { id: 'rule-upper', pass: /[A-Z]/.test(val) },
+    { id: 'rule-num',   pass: /[0-9]/.test(val) },
+    { id: 'rule-sym',   pass: /[^A-Za-z0-9]/.test(val) },
+  ];
+  rules.forEach(r => {
+    const el = document.getElementById(r.id);
+    el.classList.toggle('pass', r.pass);
+    el.textContent = (r.pass ? '✓ ' : '○ ') + el.textContent.replace(/^[✓○] /, '');
+  });
+}
+
+function scorePassword(val) {
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (val.length >= 12) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const levels = [
+    { pct: 20, color: '#ef4444', text: 'Very weak' },
+    { pct: 40, color: '#f97316', text: 'Weak' },
+    { pct: 60, color: '#f59e0b', text: 'Fair' },
+    { pct: 80, color: '#84cc16', text: 'Strong' },
+    { pct: 100, color: '#7ee8a2', text: 'Very strong' },
+  ];
+  return val ? levels[Math.min(score, 4)] : { pct: 0, color: '', text: '' };
+}
+
+// Forgot password steps
+function fpNext(step) {
+  document.querySelectorAll('.fp-step').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.fp-dot').forEach(d => d.classList.remove('active'));
+  document.getElementById('fp-step-' + step).classList.add('active');
+  document.getElementById('dot-' + step).classList.add('active');
+}
+
+// Schema viewer
+const schemas = {
+  users: [
+    { name: 'id', type: 'uuid', nullable: 'NO', note: 'Primary key', flag: 'pk' },
+    { name: 'email', type: 'varchar(255)', nullable: 'NO', note: 'Unique index' },
+    { name: 'password_hash', type: 'varchar(255)', nullable: 'NO', note: 'bcrypt/Argon2' },
+    { name: 'name', type: 'varchar(100)', nullable: 'YES', note: '' },
+    { name: 'role', type: "enum('admin','editor','viewer')", nullable: 'NO', note: "Default: 'viewer'" },
+    { name: 'created_at', type: 'timestamptz', nullable: 'NO', note: 'Auto-set on INSERT' },
+    { name: 'updated_at', type: 'timestamptz', nullable: 'NO', note: 'Auto-updated' },
+    { name: 'deleted_at', type: 'timestamptz', nullable: 'YES', note: 'Soft delete' },
+  ],
+  sessions: [
+    { name: 'id', type: 'uuid', nullable: 'NO', note: 'Primary key', flag: 'pk' },
+    { name: 'user_id', type: 'uuid', nullable: 'NO', note: '→ users.id', flag: 'fk' },
+    { name: 'token_hash', type: 'varchar(255)', nullable: 'NO', note: 'Hashed session token' },
+    { name: 'expires_at', type: 'timestamptz', nullable: 'NO', note: 'TTL enforced by cron' },
+    { name: 'user_agent', type: 'text', nullable: 'YES', note: 'Browser/device info' },
+    { name: 'ip_address', type: 'inet', nullable: 'YES', note: 'For audit log' },
+    { name: 'created_at', type: 'timestamptz', nullable: 'NO', note: 'Auto-set on INSERT' },
+  ],
+  posts: [
+    { name: 'id', type: 'uuid', nullable: 'NO', note: 'Primary key', flag: 'pk' },
+    { name: 'user_id', type: 'uuid', nullable: 'NO', note: '→ users.id', flag: 'fk' },
+    { name: 'title', type: 'varchar(500)', nullable: 'NO', note: 'Full-text indexed' },
+    { name: 'body', type: 'text', nullable: 'NO', note: 'Markdown content' },
+    { name: 'status', type: "enum('draft','published','archived')", nullable: 'NO', note: '' },
+    { name: 'published_at', type: 'timestamptz', nullable: 'YES', note: 'NULL if draft' },
+    { name: 'created_at', type: 'timestamptz', nullable: 'NO', note: '' },
+    { name: 'deleted_at', type: 'timestamptz', nullable: 'YES', note: 'Soft delete' },
+  ],
+  tags: [
+    { name: 'id', type: 'uuid', nullable: 'NO', note: 'Primary key', flag: 'pk' },
+    { name: 'name', type: 'varchar(50)', nullable: 'NO', note: 'Unique, lowercase' },
+    { name: 'slug', type: 'varchar(50)', nullable: 'NO', note: 'URL-safe identifier' },
+    { name: 'color', type: 'varchar(7)', nullable: 'YES', note: 'Hex color code' },
+    { name: 'created_at', type: 'timestamptz', nullable: 'NO', note: '' },
+  ],
+};
+
+const schemaTips = {
+  users: 'Core identity table — every authenticated user has a row here. The deleted_at column enables soft deletes so records are hidden but not lost.',
+  sessions: 'Session store — one row per active login. Expired rows are purged by a cron job. The token_hash column stores a bcrypt hash of the session token, never the raw token.',
+  posts: 'Content table with a many-to-one relationship to users. status and published_at let you stage content before going live.',
+  tags: 'Lookup table — linked to posts via a post_tags join table (not shown) for a many-to-many relationship.',
+};
+
+function selectTable(name) {
+  document.querySelectorAll('.schema-table').forEach(t => t.classList.remove('active'));
+  document.getElementById('st-' + name).classList.add('active');
+  const cols = schemas[name];
+  const detail = document.getElementById('schemaDetail');
+  detail.setAttribute('data-tip', schemaTips[name]);
+  detail.innerHTML = `
+    <div class="schema-col-header">
+      <span>Column</span><span>Type</span><span>Nullable</span><span>Notes</span>
+    </div>
+    ${cols.map(c => `
+    <div class="schema-col-row">
+      <span class="col-name">${c.name} ${c.flag === 'pk' ? '<span class="col-pk">PK</span>' : c.flag === 'fk' ? '<span class="col-fk">FK</span>' : ''}</span>
+      <span class="col-type">${c.type}</span>
+      <span class="col-null ${c.nullable === 'NO' ? 'no' : 'yes'}">${c.nullable}</span>
+      <span class="col-note">${c.note}</span>
+    </div>`).join('')}`;
+}
+selectTable('users');
+
+// Breakpoint simulator
+const bpLabels = {
+  mobile: 'Showing: Mobile — columns stacked vertically',
+  tablet: 'Showing: Tablet — 2 columns, third wraps below',
+  desktop: 'Showing: Desktop — all 3 columns in one row'
+};
+function setBreakpoint(bp, btn) {
+  const demo = document.getElementById('responsiveDemo');
+  demo.className = 'responsive-demo bp-' + bp;
+  document.getElementById('bpLabel').textContent = bpLabels[bp];
+  document.querySelectorAll('.bp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+// Init to mobile
+document.getElementById('responsiveDemo').classList.add('bp-mobile');
+
+// Tab switching
+function switchTab(id, btn) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Dark toggle (cosmetic)
+function toggleDark() {
+  const isLight = document.documentElement.classList.toggle('light');
+  const t = document.getElementById('darkToggle');
+  const l = document.getElementById('toggleLabel');
+  t.classList.toggle('on', !isLight);
+  l.textContent = isLight ? 'Light mode ON' : 'Dark mode ON';
+  // Persist preference — in a real app this would sync to a user profile
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+// Restore saved preference on load
+if (localStorage.getItem('theme') === 'light') {
+  document.documentElement.classList.add('light');
+  document.getElementById('darkToggle').classList.remove('on');
+  document.getElementById('toggleLabel').textContent = 'Light mode ON';
+}
+
+// Tab panels inside card
+function switchPanel(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Sortable table
+let sortDir = {};
+function sortTable(col) {
+  const tbody = document.querySelector('#dataTable tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  sortDir[col] = !sortDir[col];
+  rows.sort((a, b) => {
+    const av = a.cells[col].textContent.trim();
+    const bv = b.cells[col].textContent.trim();
+    const an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return sortDir[col] ? an - bn : bn - an;
+    return sortDir[col] ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Autocomplete
+const suggestions = [
+  'Authentication flow', 'Authorization / RBAC',
+  'Cache layer (Redis)', 'Cache invalidation',
+  'Rate limiting', 'Role-based access control',
+  'Webhook events', 'API versioning',
+  'Background jobs', 'Database migrations',
+  'Session management', 'JWT tokens',
+  'Form validation', 'Infinite scroll',
+  'Modal dialogs', 'Skeleton loaders'
+];
+function handleSearch(val) {
+  const list = document.getElementById('autocompleteList');
+  if (!val) { list.classList.remove('show'); return; }
+  const matches = suggestions.filter(s => s.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
+  if (!matches.length) { list.classList.remove('show'); return; }
+  list.innerHTML = matches.map(m => {
+    const re = new RegExp(`(${val})`, 'gi');
+    return `<div class="autocomplete-item" onclick="document.getElementById('searchInput').value='${m}'; document.getElementById('autocompleteList').classList.remove('show')">${m.replace(re, '<mark>$1</mark>')}</div>`;
+  }).join('');
+  list.classList.add('show');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) document.getElementById('autocompleteList').classList.remove('show');
+});
+
+// Drag and drop
+function handleDrop(e) {
+  e.preventDefault();
+  const zone = document.getElementById('dropZone');
+  zone.classList.remove('drag-over');
+  zone.textContent = '✓ Files received';
+  const files = Array.from(e.dataTransfer.files);
+  const list = document.getElementById('droppedFiles');
+  if (!files.length) { list.innerHTML = '<div class="dnd-file" style="color:var(--muted); font-size:11px;">Try dragging a real file from your desktop</div>'; return; }
+  list.innerHTML = files.map(f => `<div class="dnd-file"><span>${f.name}</span><span>${(f.size/1024).toFixed(1)}KB</span></div>`).join('');
+}
+
+// Infinite scroll simulation
+let loadCount = 6;
+function handleScroll(el) {
+  if (el.scrollTop + el.clientHeight >= el.scrollHeight - 2) {
+    const lm = document.getElementById('loadingMore');
+    if (lm) { lm.textContent = 'Loading…'; lm.style.color = 'var(--accent3)'; }
+    setTimeout(() => {
+      for (let i = 0; i < 3; i++) {
+        const item = document.createElement('div');
+        item.className = 'scroll-item';
+        item.innerHTML = `Result #${++loadCount} — Simulated item loaded <span class="scroll-badge">Live</span>`;
+        el.insertBefore(item, lm);
+      }
+      if (lm) { lm.textContent = '↓ Scroll to load more'; lm.style.color = 'var(--accent)'; }
+    }, 600);
+  }
+}
+
+// Rate limit countdown
+let rateReset = 47;
+setInterval(() => {
+  rateReset = rateReset > 0 ? rateReset - 1 : 60;
+  document.getElementById('rateReset').textContent = rateReset + 's';
+}, 1000);
+
+// ESC closes modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+
+// ── NAV DRAWER ──────────────────────────────────────────────────
+function toggleDrawer() {
+  const open = document.getElementById('drawerPanel').classList.toggle('open');
+  document.getElementById('drawerBackdrop').classList.toggle('open', open);
+  document.getElementById('drawerTrigger').classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('drawerPanel').classList.remove('open');
+  document.getElementById('drawerBackdrop').classList.remove('open');
+  document.getElementById('drawerTrigger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+// ────────────────────────────────────────────────────────────────
+
+// ── HTTPS LIFECYCLE ENGINE ───────────────────────────────────────
+const scenarios = {
+  '200': {
+    status: 200, text: 'OK', cls: 'status-2xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'private, max-age=0',
+      'X-Request-Id': 'req_8f3k2j',
+      'X-RateLimit-Remaining': '99',
+      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    },
+    body: '{\n  <span class="json-key">"id"</span>: <span class="json-num">42</span>,\n  <span class="json-key">"name"</span>: <span class="json-str">"Jane Smith"</span>,\n  <span class="json-key">"role"</span>: <span class="json-str">"admin"</span>,\n  <span class="json-key">"active"</span>: <span class="json-bool">true</span>\n}',
+    error: null,
+    timings: { dns:18, tcp:22, tls:45, req:3, ttfb:28, dl:6 }
+  },
+  '201': {
+    status: 201, text: 'Created', cls: 'status-2xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'Location': '/users/43',
+      'X-Request-Id': 'req_9g4l3k',
+    },
+    body: '{\n  <span class="json-key">"id"</span>: <span class="json-num">43</span>,\n  <span class="json-key">"created"</span>: <span class="json-bool">true</span>\n}',
+    error: null,
+    timings: { dns:16, tcp:20, tls:42, req:4, ttfb:35, dl:4 }
+  },
+  '301': {
+    status: 301, text: 'Moved Permanently', cls: 'status-3xx',
+    resHeaders: {
+      'Location': 'https://api.example.com/v2/users/42',
+      'Cache-Control': 'max-age=86400',
+      'Content-Length': '0',
+    },
+    body: '<span class="json-null">// Empty body — client follows Location header\n// Browser/fetch will auto-redirect to the new URL</span>',
+    error: null,
+    timings: { dns:17, tcp:21, tls:44, req:2, ttfb:12, dl:1 }
+  },
+  '401': {
+    status: 401, text: 'Unauthorized', cls: 'status-4xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'WWW-Authenticate': 'Bearer realm="api"',
+      'X-Request-Id': 'req_err_001',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"unauthorized"</span>,\n  <span class="json-key">"message"</span>: <span class="json-str">"Missing or invalid token"</span>\n}',
+    error: { title: '401 Unauthorized', desc: '<strong>Missing or expired authentication token.</strong> The request requires a valid Bearer token in the Authorization header. Check that the token has not expired and is being sent correctly.', retry: false },
+    timings: { dns:16, tcp:20, tls:43, req:2, ttfb:8, dl:3 }
+  },
+  '403': {
+    status: 403, text: 'Forbidden', cls: 'status-4xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'X-Request-Id': 'req_err_002',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"forbidden"</span>,\n  <span class="json-key">"message"</span>: <span class="json-str">"Insufficient permissions"</span>\n}',
+    error: { title: '403 Forbidden', desc: '<strong>Authenticated but not authorised.</strong> Unlike 401, the server knows who you are — you just do not have the required role or permission for this resource. Retrying with the same credentials will not help.', retry: false },
+    timings: { dns:15, tcp:19, tls:41, req:2, ttfb:6, dl:3 }
+  },
+  '404': {
+    status: 404, text: 'Not Found', cls: 'status-4xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'X-Request-Id': 'req_err_003',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"not_found"</span>,\n  <span class="json-key">"message"</span>: <span class="json-str">"Resource /users/42 does not exist"</span>\n}',
+    error: { title: '404 Not Found', desc: '<strong>The resource does not exist at this path.</strong> Verify the URL, ID, and that the resource has not been deleted. Note: some APIs return 404 instead of 403 intentionally, to avoid leaking whether a resource exists.', retry: false },
+    timings: { dns:16, tcp:20, tls:42, req:2, ttfb:7, dl:3 }
+  },
+  '429': {
+    status: 429, text: 'Too Many Requests', cls: 'status-4xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'Retry-After': '30',
+      'X-RateLimit-Limit': '100',
+      'X-RateLimit-Remaining': '0',
+      'X-RateLimit-Reset': '1714000830',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"rate_limited"</span>,\n  <span class="json-key">"retry_after"</span>: <span class="json-num">30</span>\n}',
+    error: { title: '429 Too Many Requests', desc: '<strong>Rate limit exceeded.</strong> The client has sent too many requests in the allowed window. The <code>Retry-After</code> header tells you how many seconds to wait before retrying. Implement exponential backoff in production clients.', retry: true },
+    timings: { dns:15, tcp:18, tls:40, req:2, ttfb:5, dl:3 }
+  },
+  '500': {
+    status: 500, text: 'Internal Server Error', cls: 'status-5xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'X-Request-Id': 'req_err_srv_001',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"internal_error"</span>,\n  <span class="json-key">"message"</span>: <span class="json-str">"An unexpected error occurred"</span>,\n  <span class="json-key">"request_id"</span>: <span class="json-str">"req_err_srv_001"</span>\n}',
+    error: { title: '500 Internal Server Error', desc: '<strong>Unhandled exception on the server.</strong> The client did nothing wrong — this is a server bug. Log the <code>X-Request-Id</code> and report it. Safe to retry with exponential backoff, but the server may need a fix.', retry: true },
+    timings: { dns:16, tcp:20, tls:43, req:3, ttfb:180, dl:4 }
+  },
+  '503': {
+    status: 503, text: 'Service Unavailable', cls: 'status-5xx',
+    resHeaders: {
+      'Content-Type': 'application/json',
+      'Retry-After': '60',
+    },
+    body: '{\n  <span class="json-key">"error"</span>: <span class="json-str">"service_unavailable"</span>,\n  <span class="json-key">"message"</span>: <span class="json-str">"Server is overloaded or down for maintenance"</span>\n}',
+    error: { title: '503 Service Unavailable', desc: '<strong>Server is temporarily unable to handle the request.</strong> Often caused by a deploy, overload, or health-check failure. <code>Retry-After</code> gives the backoff window. Circuit breakers in API gateways emit this during cascading failures.', retry: true },
+    timings: { dns:14, tcp:400, tls:0, req:0, ttfb:0, dl:0 }
+  },
+};
+
+const phaseOrder = ['dns','tcp','tls','req','ttfb','dl'];
+const phaseColors = { dns:'#a78bfa', tcp:'#60a5fa', tls:'#34d399', req:'#fbbf24', ttfb:'#f472b6', dl:'#7ee8a2' };
+let logCount = 0;
+let running = false;
+
+function resetPipeline() {
+  phaseOrder.forEach(p => {
+    const dot = document.getElementById('dot-'+p);
+    const line = document.getElementById('line-'+p);
+    const ms = document.getElementById('ms-'+p);
+    const detail = document.getElementById('detail-'+p);
+    if (dot) { dot.className = 'phase-dot'; }
+    if (line) { line.className = 'phase-line'; }
+    if (ms) { ms.textContent = ''; ms.className = 'phase-ms'; }
+    if (detail) detail.classList.remove('show');
+  });
+  document.getElementById('timingWrap').style.display = 'none';
+  document.getElementById('errorPanel').classList.remove('show');
+  document.getElementById('statusBadge').innerHTML = '';
+  document.getElementById('resHeaders').innerHTML = '<div style="font-size:11px;color:var(--muted);padding:20px 0;text-align:center">Waiting for response…</div>';
+  document.getElementById('resBody').style.display = 'none';
+  document.getElementById('bodyLabel').style.display = 'none';
+  document.getElementById('reqHeaders').innerHTML = '';
+}
+
+function buildReqHeaders() {
+  const method = document.getElementById('methodSelect').value;
+  const url = document.getElementById('urlInput').value;
+  let u; try { u = new URL(url); } catch(e) { u = { host: url, pathname: url }; }
+  const headers = {
+    'Request Line': method + ' ' + (u.pathname||'/') + ' HTTP/1.1',
+    'Host': u.host || 'api.example.com',
+    'Authorization': 'Bearer eyJhbGc...tok',
+    'Accept': 'application/json',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'User-Agent': 'MyApp/2.1 (compatible)',
+  };
+  if (method === 'POST' || method === 'PUT') {
+    headers['Content-Type'] = 'application/json';
+    headers['Content-Length'] = '54';
+  }
+  return headers;
+}
+
+async function runLifecycle() {
+  if (running) return;
+  running = true;
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending…';
+
+  resetPipeline();
+  // Switch to request panel and populate
+  switchRR('request', document.querySelector('.rr-tab'));
+  const reqH = buildReqHeaders();
+  const reqBlock = document.getElementById('reqHeaders');
+  reqBlock.innerHTML = Object.entries(reqH).map(([k,v]) =>
+    `<div class="header-row" data-tip="${headerTip(k)}"><span class="header-name">${k}:</span><span class="header-val ${k==='Request Line'?'':'muted'}">${v}</span></div>`
+  ).join('');
+
+  const scenario = scenarios[document.getElementById('scenarioSelect').value];
+  const timings = scenario.timings;
+  const phaseDurations = { dns: timings.dns, tcp: timings.tcp, tls: timings.tls, req: timings.req, ttfb: timings.ttfb, dl: timings.dl };
+
+  // Animate phases sequentially
+  const details = {
+    dns: document.getElementById('detail-dns'),
+    tcp: document.getElementById('detail-tcp'),
+    tls: document.getElementById('detail-tls'),
+    req: `${document.getElementById('methodSelect').value} ${document.getElementById('urlInput').value}`,
+    ttfb: document.getElementById('detail-ttfb'),
+    dl: null,
+  };
+
+  const phasesToRun = scenario.status === 503
+    ? ['dns','tcp']  // connection refused — stops after TCP
+    : phaseOrder;
+
+  for (const p of phaseOrder) {
+    const dot = document.getElementById('dot-'+p);
+    const line = document.getElementById('line-'+p);
+    const ms = document.getElementById('ms-'+p);
+    const detail = document.getElementById('detail-'+p);
+
+    if (!phasesToRun.includes(p)) break;
+
+    dot.className = 'phase-dot active';
+    const dur = phaseDurations[p];
+    const delay = Math.min(dur * 6, 900);
+    await sleep(delay);
+
+    if (scenario.status === 503 && p === 'tcp') {
+      dot.className = 'phase-dot error';
+      ms.textContent = dur + 'ms (timeout)';
+      ms.className = 'phase-ms done';
+      break;
+    }
+
+    dot.className = 'phase-dot done';
+    if (line) line.className = 'phase-line done';
+    ms.textContent = dur + 'ms';
+    ms.className = 'phase-ms done';
+    if (detail && detail.tagName) detail.classList.add('show');
+    if (p === 'req' && detail) {
+      document.getElementById('detail-req').textContent = details.req;
+      document.getElementById('detail-req').classList.add('show');
+    }
+    if (p === 'dl') {
+      const size = JSON.stringify(scenario.body).length;
+      document.getElementById('detail-dl').textContent = `Size: ~${size} bytes\nEncoding: gzip`;
+      document.getElementById('detail-dl').classList.add('show');
+    }
+  }
+
+  // Populate response panel
+  switchRR('response', document.querySelectorAll('.rr-tab')[1]);
+
+  const statusEl = document.getElementById('statusBadge');
+  statusEl.innerHTML = `<div class="status-badge ${scenario.cls}" data-tip="Status code — 3-digit code indicating result. 2xx=success, 3xx=redirect, 4xx=client error, 5xx=server error">${scenario.status} ${scenario.text}</div>`;
+
+  const resBlock = document.getElementById('resHeaders');
+  resBlock.innerHTML = Object.entries(scenario.resHeaders).map(([k,v]) =>
+    `<div class="header-row" data-tip="${resHeaderTip(k)}"><span class="header-name">${k}:</span><span class="header-val muted">${v}</span></div>`
+  ).join('');
+
+  const bodyEl = document.getElementById('resBody');
+  const bodyLabel = document.getElementById('bodyLabel');
+  bodyEl.innerHTML = scenario.body;
+  bodyEl.style.display = 'block';
+  bodyLabel.style.display = 'block';
+
+  // Error panel
+  if (scenario.error) {
+    const ep = document.getElementById('errorPanel');
+    document.getElementById('errorTitle').textContent = '⚠ ' + scenario.error.title;
+    document.getElementById('errorDesc').innerHTML = scenario.error.desc;
+    const rb = document.getElementById('retryBtn');
+    rb.style.display = scenario.error.retry ? 'inline-block' : 'none';
+    ep.classList.add('show');
+  }
+
+  // Timing waterfall
+  if (phasesToRun.length === phaseOrder.length) {
+    const total = Object.values(phaseDurations).reduce((a,b)=>a+b,0);
+    const track = document.getElementById('timingTrack');
+    track.innerHTML = '';
+    let offset = 0;
+    phaseOrder.forEach(p => {
+      const seg = document.createElement('div');
+      seg.className = 'timing-segment';
+      const pct = (phaseDurations[p] / total) * 100;
+      seg.style.left = offset + '%';
+      seg.style.width = '0%';
+      seg.style.background = phaseColors[p];
+      seg.textContent = phaseDurations[p] > 10 ? phaseDurations[p]+'ms' : '';
+      track.appendChild(seg);
+      setTimeout(() => { seg.style.width = pct + '%'; }, 50);
+      offset += pct;
+    });
+    document.getElementById('totalTime').textContent = `Total: ${total}ms · TTFB: ${phaseDurations.dns+phaseDurations.tcp+phaseDurations.tls+phaseDurations.req+phaseDurations.ttfb}ms`;
+    document.getElementById('timingWrap').style.display = 'block';
+  }
+
+  // Log entry
+  addLogEntry(scenario);
+
+  btn.disabled = false;
+  btn.innerHTML = '▶ Send';
+  running = false;
+}
+
+function addLogEntry(scenario) {
+  const tbody = document.getElementById('logBody');
+  const placeholder = tbody.querySelector('td[colspan]');
+  if (placeholder) placeholder.parentElement.remove();
+  logCount++;
+  const method = document.getElementById('methodSelect').value;
+  const url = document.getElementById('urlInput').value;
+  const total = Object.values(scenario.timings).reduce((a,b)=>a+b,0);
+  const cls = 'log-' + (scenario.status < 300 ? '2xx' : scenario.status < 400 ? '3xx' : scenario.status < 500 ? '4xx' : '5xx');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="color:var(--muted)">${logCount}</td><td class="log-method" style="color:var(--accent2)">${method}</td><td style="color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${url}</td><td class="log-status ${cls}">${scenario.status} ${scenario.text}</td><td class="log-time">${total}ms</td>`;
+  tbody.insertBefore(tr, tbody.firstChild);
+}
+
+function clearLog() {
+  document.getElementById('logBody').innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:14px">No requests yet</td></tr>';
+  logCount = 0;
+}
+
+function switchRR(panel, btn) {
+  document.querySelectorAll('.rr-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rr-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('rr-'+panel).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function headerTip(k) {
+  const tips = {
+    'Request Line': 'The HTTP start line — method, path, and protocol version',
+    'Host': 'Required in HTTP/1.1 — identifies the virtual host on a shared server',
+    'Authorization': 'Carries the auth credential. Bearer tokens are JWTs or opaque tokens.',
+    'Accept': 'Tells the server what response formats the client can handle',
+    'Accept-Encoding': 'Client signals it can decompress gzip/brotli — reduces transfer size',
+    'Connection': 'keep-alive reuses the TCP connection for subsequent requests (HTTP/1.1)',
+    'User-Agent': 'Client identifier — used for analytics and occasionally feature detection',
+    'Content-Type': 'Required when sending a body — tells the server how to parse it',
+    'Content-Length': 'Byte length of the request body',
+  };
+  return tips[k] || k;
+}
+
+function resHeaderTip(k) {
+  const tips = {
+    'Content-Type': 'Tells the client how to parse the response body',
+    'Cache-Control': 'Directives for caching — private prevents CDN caching, max-age sets TTL',
+    'X-Request-Id': 'Correlation ID — attach to bug reports so engineers can trace the request in logs',
+    'X-RateLimit-Remaining': 'Requests left in the current rate limit window',
+    'Strict-Transport-Security': 'HSTS — tells the browser to always use HTTPS for this domain',
+    'Location': 'Redirect target (3xx) or newly created resource URL (201)',
+    'WWW-Authenticate': 'Tells the client what auth scheme to use on retry',
+    'Retry-After': 'Seconds to wait before retrying — sent with 429 and 503',
+    'X-RateLimit-Limit': 'Maximum requests allowed in the window',
+    'X-RateLimit-Reset': 'Unix timestamp when the rate limit window resets',
+    'Content-Length': 'Response body size in bytes',
+  };
+  return tips[k] || k;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+// ────────────────────────────────────────────────────────────────
+
+</script>
+</body>
+</html>
