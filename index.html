@@ -998,6 +998,634 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+
+  /* =========== APP ANATOMY TAB =========== */
+  #tab-anatomy { padding: 0; }
+
+  .anatomy-controls {
+    display: flex; align-items: center; gap: 6px;
+    padding: 20px 40px 0;
+    flex-wrap: wrap;
+  }
+  .anatomy-view-btn {
+    padding: 8px 18px;
+    font-family: var(--font-mono); font-size: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 6px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .anatomy-view-btn:hover { border-color: var(--accent); color: var(--text); }
+  .anatomy-view-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(126,232,162,0.08); }
+
+  .anatomy-desc {
+    padding: 10px 40px 0;
+    font-size: 11px; color: var(--muted); line-height: 1.6;
+  }
+
+  .anatomy-stage {
+    padding: 24px 40px 32px;
+    display: flex; gap: 32px; align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* The mock screen frame */
+  .mock-frame {
+    flex: 0 0 auto;
+    width: 680px; max-width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    position: relative;
+  }
+  .mock-frame-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mock-dot-r { background: #ef4444; }
+  .mock-dot-y { background: #f59e0b; }
+  .mock-dot-g { background: #22c55e; }
+  .mock-url {
+    flex: 1; background: var(--surface2); border-radius: 4px;
+    padding: 3px 10px; font-size: 10px; color: var(--muted);
+    font-family: var(--font-mono); margin: 0 8px;
+  }
+
+  /* Anatomy region — the labeled zones */
+  .ar {
+    position: absolute;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    z-index: 2;
+  }
+  .ar:hover {
+    border-color: var(--accent);
+    background: rgba(126,232,162,0.08);
+    z-index: 10;
+  }
+  .ar.highlighted {
+    border-color: var(--accent);
+    background: rgba(126,232,162,0.1);
+  }
+  .ar-pin {
+    position: absolute;
+    top: 4px; left: 6px;
+    font-size: 9px; font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    background: rgba(0,0,0,0.5);
+    padding: 1px 4px; border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .ar:hover .ar-pin, .ar.highlighted .ar-pin { opacity: 1; }
+
+  /* Label panel beside the frame */
+  .anatomy-legend {
+    flex: 1; min-width: 200px;
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: 520px; overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  .legend-item {
+    padding: 9px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    border-left: 3px solid var(--border);
+  }
+  .legend-item:hover, .legend-item.highlighted {
+    border-color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(126,232,162,0.04);
+  }
+  .legend-name {
+    font-family: var(--font-head);
+    font-size: 12px; font-weight: 700;
+    color: var(--text); margin-bottom: 3px;
+  }
+  .legend-def {
+    font-size: 11px; color: var(--muted); line-height: 1.5;
+  }
+  .legend-tag {
+    display: inline-block; font-size: 9px;
+    padding: 1px 6px; border-radius: 10px;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border); margin-top: 4px;
+  }
+
+  /* ── LANDING PAGE mock elements ── */
+  .mock-landing { position: relative; height: 520px; background: var(--surface2); }
+
+  .ml-topnav { position:absolute; top:0; left:0; right:0; height:44px;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 16px; gap:10px; }
+  .ml-logo { width:60px; height:14px; background:var(--accent); border-radius:3px; opacity:0.7; }
+  .ml-navlinks { display:flex; gap:8px; margin-left:16px; }
+  .ml-navlink { width:36px; height:8px; background:var(--border); border-radius:2px; }
+  .ml-navlink.active { background:var(--accent2); opacity:0.7; }
+  .ml-cta-nav { margin-left:auto; width:60px; height:24px; background:var(--accent); border-radius:4px; opacity:0.7; }
+
+  .ml-hero { position:absolute; top:44px; left:0; right:0; height:200px;
+    background:linear-gradient(135deg, rgba(91,156,246,0.1), rgba(126,232,162,0.06));
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+  .ml-hero-h { width:280px; height:18px; background:var(--text); border-radius:3px; opacity:0.15; }
+  .ml-hero-sub { width:200px; height:10px; background:var(--muted); border-radius:2px; opacity:0.3; }
+  .ml-hero-btns { display:flex; gap:8px; margin-top:4px; }
+  .ml-hero-btn { width:80px; height:28px; border-radius:5px; }
+  .ml-hero-btn.primary { background:var(--accent); opacity:0.8; }
+  .ml-hero-btn.secondary { background:transparent; border:1px solid var(--border); }
+
+  .ml-social { position:absolute; top:244px; left:0; right:0; height:36px;
+    background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; gap:16px; }
+  .ml-social-item { width:50px; height:10px; background:var(--border); border-radius:2px; }
+
+  .ml-features { position:absolute; top:300px; left:0; right:0; padding:16px;
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .ml-feat-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:10px; }
+  .ml-feat-icon { width:20px; height:20px; border-radius:4px; background:var(--accent2); opacity:0.4; margin-bottom:6px; }
+  .ml-feat-title { width:60%; height:8px; background:var(--text); border-radius:2px; opacity:0.2; margin-bottom:4px; }
+  .ml-feat-body { width:90%; height:6px; background:var(--muted); border-radius:2px; opacity:0.25; }
+  .ml-feat-body2 { width:70%; height:6px; background:var(--muted); border-radius:2px; opacity:0.2; margin-top:3px; }
+
+  .ml-footer { position:absolute; bottom:0; left:0; right:0; height:42px;
+    background:var(--surface); border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+  .ml-footer-copy { width:80px; height:8px; background:var(--muted); border-radius:2px; opacity:0.3; }
+  .ml-footer-links { display:flex; gap:8px; }
+  .ml-footer-link { width:36px; height:8px; background:var(--muted); border-radius:2px; opacity:0.2; }
+
+  /* ── DASHBOARD mock elements ── */
+  .mock-dashboard { position:relative; height:520px; background:var(--bg); display:flex; }
+
+  .md-sidebar { width:160px; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; padding:12px 0; flex-shrink:0; }
+  .md-sidebar-logo { height:32px; border-bottom:1px solid var(--border); margin-bottom:8px;
+    display:flex; align-items:center; padding:0 12px; gap:6px; }
+  .md-sidebar-logo-box { width:20px; height:20px; background:var(--accent); border-radius:4px; opacity:0.8; }
+  .md-sidebar-logo-text { width:50px; height:10px; background:var(--text); border-radius:2px; opacity:0.2; }
+  .md-nav-item { display:flex; align-items:center; gap:6px; padding:7px 12px; }
+  .md-nav-icon { width:14px; height:14px; background:var(--border); border-radius:3px; }
+  .md-nav-label { width:50px; height:8px; background:var(--border); border-radius:2px; }
+  .md-nav-item.active .md-nav-icon { background:var(--accent); opacity:0.7; }
+  .md-nav-item.active .md-nav-label { background:var(--accent); opacity:0.5; }
+
+  .md-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .md-topbar { height:44px; background:var(--surface); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 16px; gap:10px; flex-shrink:0; }
+  .md-topbar-title { width:100px; height:12px; background:var(--text); border-radius:2px; opacity:0.2; }
+  .md-topbar-search { flex:1; max-width:200px; height:26px; background:var(--surface2);
+    border:1px solid var(--border); border-radius:5px; }
+  .md-topbar-avatar { width:28px; height:28px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); margin-left:auto; opacity:0.8; }
+  .md-topbar-bell { width:20px; height:20px; background:var(--border); border-radius:4px; margin-right:4px; }
+
+  .md-content { flex:1; padding:14px; overflow:hidden; }
+  .md-kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+  .md-kpi { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:10px; }
+  .md-kpi-label { width:50%; height:7px; background:var(--muted); border-radius:2px; opacity:0.4; margin-bottom:6px; }
+  .md-kpi-val { width:40%; height:14px; background:var(--text); border-radius:2px; opacity:0.2; }
+
+  .md-charts-row { display:grid; grid-template-columns:2fr 1fr; gap:8px; margin-bottom:12px; }
+  .md-chart { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:10px; height:120px; }
+  .md-chart-title { width:80px; height:8px; background:var(--muted); border-radius:2px; opacity:0.4; margin-bottom:8px; }
+  .md-chart-bars { display:flex; align-items:flex-end; gap:4px; height:80px; }
+  .md-bar { flex:1; border-radius:2px 2px 0 0; background:var(--accent2); opacity:0.4; }
+
+  .md-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  .md-table-header { display:flex; justify-content:space-between; align-items:center;
+    padding:8px 12px; border-bottom:1px solid var(--border); }
+  .md-table-title { width:80px; height:9px; background:var(--text); border-radius:2px; opacity:0.2; }
+  .md-table-btn { width:50px; height:20px; background:var(--accent); border-radius:4px; opacity:0.6; }
+  .md-table-row { display:flex; gap:8px; padding:7px 12px; border-bottom:1px solid rgba(42,42,58,0.4); align-items:center; }
+  .md-table-row:last-child { border-bottom:none; }
+  .md-cell { height:8px; background:var(--border); border-radius:2px; }
+
+  /* ── DETAIL PAGE mock elements ── */
+  .mock-detail { position:relative; height:520px; background:var(--bg); display:flex; }
+
+  .md2-sidebar { width:160px; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; padding:12px 0; flex-shrink:0; }
+
+  .md2-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .md2-topbar { height:44px; background:var(--surface); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 16px; gap:8px; flex-shrink:0; }
+  .md2-breadcrumb { display:flex; align-items:center; gap:6px; }
+  .md2-bc-item { width:40px; height:8px; background:var(--muted); border-radius:2px; opacity:0.3; }
+  .md2-bc-item.current { background:var(--text); opacity:0.2; }
+  .md2-bc-sep { width:6px; height:8px; background:var(--border); border-radius:1px; opacity:0.4; }
+
+  .md2-content { flex:1; padding:14px; display:flex; gap:12px; overflow:hidden; }
+  .md2-left { flex:1; display:flex; flex-direction:column; gap:10px; }
+  .md2-right { width:180px; display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+
+  .md2-hero-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:14px; }
+  .md2-hero-top { display:flex; gap:10px; margin-bottom:10px; align-items:flex-start; }
+  .md2-avatar-lg { width:40px; height:40px; border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); flex-shrink:0; opacity:0.8; }
+  .md2-title-block { flex:1; }
+  .md2-title { width:70%; height:12px; background:var(--text); border-radius:2px; opacity:0.2; margin-bottom:5px; }
+  .md2-subtitle { width:50%; height:8px; background:var(--muted); border-radius:2px; opacity:0.3; }
+  .md2-tags { display:flex; gap:4px; margin-bottom:8px; }
+  .md2-tag { width:44px; height:16px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; }
+  .md2-body-lines { display:flex; flex-direction:column; gap:4px; }
+  .md2-line { height:8px; background:var(--muted); border-radius:2px; opacity:0.2; }
+
+  .md2-tabs-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .md2-tab-row { display:flex; border-bottom:1px solid var(--border); }
+  .md2-tab { flex:1; height:28px; background:transparent; }
+  .md2-tab.active { background:rgba(126,232,162,0.06); border-bottom:2px solid var(--accent); }
+  .md2-tab-content { padding:10px 12px; display:flex; flex-direction:column; gap:5px; }
+
+  .md2-action-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px;
+    display:flex; flex-direction:column; gap:6px; }
+  .md2-action-title { width:60%; height:8px; background:var(--muted); border-radius:2px; opacity:0.4; }
+  .md2-action-btn { height:28px; background:var(--accent); border-radius:5px; opacity:0.7; }
+  .md2-action-btn.ghost { background:transparent; border:1px solid var(--border); opacity:1; }
+
+  .md2-meta-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px;
+    display:flex; flex-direction:column; gap:7px; }
+  .md2-meta-row { display:flex; justify-content:space-between; align-items:center; }
+  .md2-meta-key { width:40%; height:7px; background:var(--muted); border-radius:2px; opacity:0.3; }
+  .md2-meta-val { width:35%; height:7px; background:var(--text); border-radius:2px; opacity:0.15; }
+
+
+  /* =========== USER FLOWS TAB =========== */
+  #tab-flows { padding: 0; }
+
+  .flows-controls {
+    display: flex; align-items: center; gap: 6px;
+    padding: 20px 40px 0; flex-wrap: wrap;
+  }
+  .flow-select-btn {
+    padding: 8px 18px;
+    font-family: var(--font-mono); font-size: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 6px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .flow-select-btn:hover { border-color: var(--accent2); color: var(--text); }
+  .flow-select-btn.active { border-color: var(--accent2); color: var(--accent2); background: rgba(91,156,246,0.08); }
+
+  .flow-desc {
+    padding: 10px 40px 0;
+    font-size: 11px; color: var(--muted); line-height: 1.6; max-width: 680px;
+  }
+
+  /* Mode toggle */
+  .flow-mode-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 40px 0;
+  }
+  .flow-mode-lbl { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .flow-mode-btn {
+    padding: 5px 12px; font-size: 11px;
+    font-family: var(--font-mono);
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 5px; cursor: pointer; transition: all 0.2s;
+  }
+  .flow-mode-btn.active { border-color: var(--accent2); color: var(--accent2); background: rgba(91,156,246,0.08); }
+
+  /* ── MAP VIEW ── */
+  .flow-map-wrap {
+    padding: 24px 40px 0;
+    overflow-x: auto;
+  }
+  .flow-map {
+    display: flex; align-items: flex-start; gap: 0;
+    min-width: max-content; padding-bottom: 16px;
+    position: relative;
+  }
+
+  /* Screen card in map */
+  .fmap-col {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .fmap-screen {
+    width: 140px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+    cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+  }
+  .fmap-screen:hover { border-color: var(--accent2); box-shadow: 0 4px 16px rgba(91,156,246,0.15); }
+  .fmap-screen.active { border-color: var(--accent2); box-shadow: 0 4px 20px rgba(91,156,246,0.25); }
+  .fmap-screen.error-screen:hover { border-color: #ef4444; box-shadow: 0 4px 16px rgba(239,68,68,0.15); }
+  .fmap-screen.error-screen.active { border-color: #ef4444; }
+  .fmap-bar {
+    height: 16px; background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 5px; gap: 3px;
+  }
+  .fmap-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .fmap-content { padding: 6px; min-height: 80px; }
+  .fmap-title {
+    font-family: var(--font-head); font-size: 10px; font-weight: 700;
+    color: var(--text); margin-bottom: 4px;
+  }
+  .fmap-label {
+    font-size: 10px; color: var(--muted); text-align: center;
+    max-width: 140px; line-height: 1.4;
+  }
+  .fmap-step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent2); color: white;
+    font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); flex-shrink: 0;
+  }
+  .fmap-step-num.error { background: #ef4444; }
+
+  /* Connector arrow between screens */
+  .fmap-arrow {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; width: 48px; flex-shrink: 0;
+    padding-top: 40px;
+  }
+  .fmap-arrow-line {
+    width: 32px; height: 2px; background: var(--border); position: relative;
+  }
+  .fmap-arrow-line::after {
+    content: ''; position: absolute; right: -5px; top: -4px;
+    border: 5px solid transparent; border-left-color: var(--border);
+  }
+  .fmap-arrow-label {
+    font-size: 9px; color: var(--muted); margin-top: 4px;
+    font-family: var(--font-mono); white-space: nowrap;
+  }
+  .fmap-arrow.error .fmap-arrow-line { background: #ef4444; }
+  .fmap-arrow.error .fmap-arrow-line::after { border-left-color: #ef4444; }
+  .fmap-arrow.error .fmap-arrow-label { color: #ef4444; }
+
+  /* ── STEP-THROUGH VIEW ── */
+  .flow-step-wrap {
+    padding: 24px 40px 0;
+    display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;
+  }
+
+  /* Step progress bar */
+  .flow-progress {
+    display: flex; align-items: center; gap: 0;
+    padding: 0 40px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .fp-step-pill {
+    display: flex; align-items: center; gap: 0; cursor: pointer;
+  }
+  .fp-step-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; font-family: var(--font-mono);
+    color: var(--muted); transition: all 0.25s; flex-shrink: 0;
+  }
+  .fp-step-circle.done { background: var(--accent); border-color: var(--accent); color: #0c0c10; }
+  .fp-step-circle.current { background: var(--accent2); border-color: var(--accent2); color: white; }
+  .fp-step-circle.err { background: #ef4444; border-color: #ef4444; color: white; }
+  .fp-step-name {
+    font-size: 10px; color: var(--muted); margin: 0 6px;
+    white-space: nowrap; transition: color 0.2s;
+  }
+  .fp-step-name.current { color: var(--accent2); }
+  .fp-connector { width: 24px; height: 2px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
+  .fp-connector.done { background: var(--accent); }
+
+  /* The step detail panel */
+  .flow-step-screen {
+    width: 280px; flex-shrink: 0;
+    background: var(--surface);
+    border: 2px solid var(--accent2);
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(91,156,246,0.12);
+  }
+  .fss-bar {
+    height: 22px; background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 8px; gap: 4px;
+  }
+  .fss-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .fss-url { font-size: 9px; color: var(--muted); margin-left: 4px; font-family: var(--font-mono); }
+  .fss-content { padding: 14px; min-height: 200px; }
+
+  .flow-step-info { flex: 1; min-width: 220px; }
+  .fsi-num {
+    font-size: 10px; color: var(--accent2); font-family: var(--font-mono);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .fsi-title {
+    font-family: var(--font-head); font-size: 18px; font-weight: 800;
+    color: var(--text); margin-bottom: 8px; line-height: 1.1;
+  }
+  .fsi-desc { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+  .fsi-terms { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .fsi-term {
+    padding: 7px 10px;
+    background: var(--surface2); border-radius: 5px;
+    border-left: 3px solid var(--accent2); font-size: 11px;
+  }
+  .fsi-term-name { color: var(--text); font-weight: 600; font-family: var(--font-head); }
+  .fsi-term-def { color: var(--muted); font-size: 10px; margin-top: 1px; }
+  .fsi-nav { display: flex; gap: 8px; align-items: center; }
+  .fsi-nav-btn {
+    padding: 7px 16px; font-family: var(--font-mono); font-size: 12px;
+    border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .fsi-nav-btn.prev {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+  }
+  .fsi-nav-btn.prev:hover { border-color: var(--text); color: var(--text); }
+  .fsi-nav-btn.next {
+    background: rgba(91,156,246,0.1); border: 1px solid rgba(91,156,246,0.35); color: var(--accent2);
+  }
+  .fsi-nav-btn.next:hover { background: rgba(91,156,246,0.2); }
+  .fsi-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .fsi-step-of { font-size: 10px; color: var(--muted); margin-left: auto; }
+
+  /* Micro screen components for step previews */
+  .ms-field { margin-bottom: 8px; }
+  .ms-label { height: 7px; width: 40%; background: var(--muted); border-radius: 2px; opacity: 0.4; margin-bottom: 4px; }
+  .ms-input { height: 22px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; }
+  .ms-input.focus { border-color: var(--accent2); }
+  .ms-input.error { border-color: #ef4444; }
+  .ms-input.valid { border-color: var(--accent); }
+  .ms-btn { height: 26px; border-radius: 4px; margin-top: 4px; }
+  .ms-btn.primary { background: var(--accent2); opacity: 0.8; }
+  .ms-btn.ghost { background: transparent; border: 1px solid var(--border); }
+  .ms-btn.accent { background: var(--accent); opacity: 0.8; }
+  .ms-title { height: 14px; background: var(--text); border-radius: 3px; opacity: 0.15; margin-bottom: 8px; }
+  .ms-title.sm { height: 10px; width: 70%; }
+  .ms-sub { height: 8px; background: var(--muted); border-radius: 2px; opacity: 0.3; margin-bottom: 6px; }
+  .ms-divider { height: 1px; background: var(--border); margin: 8px 0; }
+  .ms-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .ms-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--accent2)); flex-shrink: 0; opacity: 0.8; }
+  .ms-line { height: 7px; background: var(--muted); border-radius: 2px; opacity: 0.25; flex: 1; }
+  .ms-check { width: 14px; height: 14px; border-radius: 3px; background: var(--accent); opacity: 0.7; flex-shrink: 0; }
+  .ms-error-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 4px; padding: 6px 8px; margin-bottom: 8px; }
+  .ms-error-line { height: 7px; background: #ef4444; border-radius: 2px; opacity: 0.5; }
+  .ms-strength { height: 4px; border-radius: 2px; margin-top: 3px; }
+  .ms-link { height: 7px; width: 50%; background: var(--accent2); border-radius: 2px; opacity: 0.5; margin: 4px auto; }
+  .ms-code-boxes { display: flex; gap: 4px; justify-content: center; margin: 8px 0; }
+  .ms-code-box { width: 22px; height: 28px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; }
+  .ms-code-box.filled { border-color: var(--accent2); background: rgba(91,156,246,0.08); }
+  .ms-kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+  .ms-kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 6px; }
+  .ms-kpi-v { height: 10px; width: 50%; background: var(--text); border-radius: 2px; opacity: 0.2; margin-top: 4px; }
+  .ms-onboard-progress { height: 4px; background: var(--surface2); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
+  .ms-onboard-fill { height: 100%; border-radius: 2px; background: var(--accent2); }
+  .ms-step-list { display: flex; flex-direction: column; gap: 5px; }
+  .ms-step-row { display: flex; align-items: center; gap: 6px; }
+  .ms-step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+  .ms-step-dot.done { background: var(--accent); }
+  .ms-step-dot.active { background: var(--accent2); }
+  .ms-email-icon { font-size: 28px; text-align: center; margin: 8px 0 6px; }
+  .ms-forgot-link { height: 7px; width: 40%; background: var(--accent2); border-radius: 2px; opacity: 0.4; margin: 4px 0 8px; }
+  .ms-oauth-row { display: flex; gap: 4px; margin-top: 6px; }
+  .ms-oauth-btn { flex: 1; height: 22px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; }
+  .ms-tag { display: inline-block; font-size: 9px; padding: 1px 6px; border-radius: 10px; font-family: var(--font-mono); font-weight: 600; }
+  .ms-tag.new { background: rgba(126,232,162,0.15); color: var(--accent); border: 1px solid rgba(126,232,162,0.3); }
+  .ms-tag.err { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+
+  /* =========== VOCABULARY TAB =========== */
+  #tab-vocab { padding: 0; }
+
+  .vocab-header {
+    padding: 28px 40px 0;
+  }
+  .vocab-header-title {
+    font-family: var(--font-head); font-size: 22px; font-weight: 800;
+    letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .vocab-header-title span { color: var(--accent2); }
+  .vocab-header-desc {
+    font-size: 12px; color: var(--muted); max-width: 540px; line-height: 1.7;
+  }
+
+  /* Search bar */
+  .vocab-search-wrap {
+    padding: 16px 40px 0;
+    max-width: 420px;
+    position: relative;
+  }
+  .vocab-search {
+    width: 100%; padding: 9px 14px 9px 34px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: var(--font-mono); font-size: 12px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .vocab-search:focus { border-color: var(--accent2); }
+  .vocab-search-icon {
+    position: absolute; left: 50px; top: 50%; transform: translateY(-50%);
+    font-size: 13px; color: var(--muted); pointer-events: none;
+  }
+  .vocab-results-count {
+    font-size: 10px; color: var(--muted); padding: 6px 40px 0;
+    font-family: var(--font-mono);
+  }
+
+  /* Group filter pills */
+  .vocab-filters {
+    display: flex; gap: 6px; padding: 14px 40px 0; flex-wrap: wrap;
+  }
+  .vocab-filter {
+    padding: 5px 14px; font-size: 11px;
+    font-family: var(--font-mono);
+    border: 1px solid var(--border); border-radius: 20px;
+    color: var(--muted); background: var(--surface2);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .vocab-filter:hover { border-color: var(--text); color: var(--text); }
+  .vocab-filter.active-all { border-color: var(--text); color: var(--text); background: var(--surface); }
+  .vocab-filter.active-layout { border-color: var(--accent3); color: var(--accent3); background: rgba(245,158,11,0.06); }
+  .vocab-filter.active-action { border-color: var(--accent4); color: var(--accent4); background: rgba(244,114,182,0.06); }
+  .vocab-filter.active-data   { border-color: var(--accent2); color: var(--accent2); background: rgba(91,156,246,0.06); }
+  .vocab-filter.active-auth   { border-color: var(--accent);  color: var(--accent);  background: rgba(126,232,162,0.06); }
+
+  /* Main grid */
+  .vocab-body {
+    padding: 20px 40px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 8px;
+    align-items: start;
+  }
+
+  /* Group heading */
+  .vocab-group-heading {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0 4px;
+    font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .vocab-group-heading::after { content:''; flex:1; height:1px; background:var(--border); }
+  .vocab-group-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* Term card */
+  .vocab-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 5px;
+    transition: border-color 0.2s, transform 0.15s;
+    border-left: 3px solid var(--border);
+  }
+  .vocab-card:hover { transform: translateY(-1px); }
+  .vocab-card.group-layout { border-left-color: var(--accent3); }
+  .vocab-card.group-action { border-left-color: var(--accent4); }
+  .vocab-card.group-data   { border-left-color: var(--accent2); }
+  .vocab-card.group-auth   { border-left-color: var(--accent);  }
+  .vocab-card.hidden { display: none; }
+
+  .vocab-term {
+    font-family: var(--font-head); font-size: 13px; font-weight: 700;
+    color: var(--text);
+  }
+  .vocab-def {
+    font-size: 11px; color: var(--muted); line-height: 1.6;
+  }
+  .vocab-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 2px;
+  }
+  .vocab-group-tag {
+    font-size: 9px; padding: 2px 7px; border-radius: 10px;
+    font-family: var(--font-mono); font-weight: 600;
+    border: 1px solid;
+  }
+  .tag-layout { color: var(--accent3); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); }
+  .tag-action { color: var(--accent4); border-color: rgba(244,114,182,0.3); background: rgba(244,114,182,0.06); }
+  .tag-data   { color: var(--accent2); border-color: rgba(91,156,246,0.3);  background: rgba(91,156,246,0.06); }
+  .tag-auth   { color: var(--accent);  border-color: rgba(126,232,162,0.3); background: rgba(126,232,162,0.06); }
+
+  .vocab-link {
+    font-size: 10px; color: var(--accent2); cursor: pointer;
+    font-family: var(--font-mono); text-decoration: none;
+    transition: opacity 0.2s; white-space: nowrap;
+  }
+  .vocab-link:hover { opacity: 0.7; text-decoration: underline; }
+
+  /* No results */
+  .vocab-empty {
+    grid-column: 1/-1; text-align: center;
+    padding: 40px; color: var(--muted); font-size: 12px;
+    display: none;
+  }
+
 </style>
 </head>
 <body>
@@ -1074,6 +1702,9 @@
   <button class="tab active" onclick="switchTab('frontend', this)">Frontend</button>
   <button class="tab" onclick="switchTab('backend', this)">Backend</button>
   <button class="tab" onclick="switchTab('https', this)">HTTPS Lifecycle</button>
+  <button class="tab" onclick="switchTab('anatomy', this)">App Anatomy</button>
+  <button class="tab" onclick="switchTab('flows', this)">User Flows</button>
+  <button class="tab" onclick="switchTab('vocab', this)">Vocabulary</button>
 </div>
 
 <!-- ======= FRONTEND TAB ======= -->
@@ -1861,6 +2492,284 @@ Serialise: ~1ms</div>
 
 </div>
 
+
+<!-- ======= APP ANATOMY TAB ======= -->
+<div id="tab-anatomy" class="content">
+
+  <div class="anatomy-controls">
+    <button class="anatomy-view-btn active" onclick="switchAnatomy('landing', this)">Landing Page</button>
+    <button class="anatomy-view-btn" onclick="switchAnatomy('dashboard', this)">Dashboard</button>
+    <button class="anatomy-view-btn" onclick="switchAnatomy('detail', this)">Detail Page</button>
+  </div>
+  <div class="anatomy-desc" id="anatomyDesc">
+    The <strong>Landing Page</strong> is the first screen a visitor sees. Its job is to communicate value, build trust, and convert visitors into users. Hover any region on the diagram or click a label to highlight it.
+  </div>
+
+  <div class="anatomy-stage">
+
+    <!-- ── LANDING PAGE ── -->
+    <div class="mock-frame" id="anatomy-landing">
+      <div class="mock-frame-bar">
+        <div class="mock-dot mock-dot-r"></div>
+        <div class="mock-dot mock-dot-y"></div>
+        <div class="mock-dot mock-dot-g"></div>
+        <div class="mock-url">https://appname.io</div>
+      </div>
+      <div class="mock-landing">
+        <!-- Visual mock elements -->
+        <div class="ml-topnav">
+          <div class="ml-logo"></div>
+          <div class="ml-navlinks">
+            <div class="ml-navlink"></div><div class="ml-navlink active"></div><div class="ml-navlink"></div>
+          </div>
+          <div class="ml-cta-nav"></div>
+        </div>
+        <div class="ml-hero">
+          <div class="ml-hero-h"></div>
+          <div class="ml-hero-sub"></div>
+          <div class="ml-hero-btns">
+            <div class="ml-hero-btn primary"></div>
+            <div class="ml-hero-btn secondary"></div>
+          </div>
+        </div>
+        <div class="ml-social">
+          <div class="ml-social-item"></div><div class="ml-social-item"></div><div class="ml-social-item"></div>
+        </div>
+        <div class="ml-features">
+          <div class="ml-feat-card"><div class="ml-feat-icon"></div><div class="ml-feat-title"></div><div class="ml-feat-body"></div><div class="ml-feat-body2"></div></div>
+          <div class="ml-feat-card"><div class="ml-feat-icon"></div><div class="ml-feat-title"></div><div class="ml-feat-body"></div><div class="ml-feat-body2"></div></div>
+          <div class="ml-feat-card"><div class="ml-feat-icon"></div><div class="ml-feat-title"></div><div class="ml-feat-body"></div><div class="ml-feat-body2"></div></div>
+        </div>
+        <div class="ml-footer">
+          <div class="ml-footer-copy"></div>
+          <div class="ml-footer-links"><div class="ml-footer-link"></div><div class="ml-footer-link"></div><div class="ml-footer-link"></div></div>
+        </div>
+        <!-- Anatomy regions -->
+        <div class="ar" id="ar-l-navbar"    style="top:0;left:0;right:0;height:44px"          onmouseenter="hlRegion('l-navbar')"    onmouseleave="unhlRegion('l-navbar')"    onclick="focusRegion('l-navbar')"><div class="ar-pin">Navbar</div></div>
+        <div class="ar" id="ar-l-logo"      style="top:4px;left:8px;width:80px;height:36px"   onmouseenter="hlRegion('l-logo')"      onmouseleave="unhlRegion('l-logo')"      onclick="focusRegion('l-logo')"><div class="ar-pin">Logo</div></div>
+        <div class="ar" id="ar-l-navlinks"  style="top:12px;left:100px;width:140px;height:20px" onmouseenter="hlRegion('l-navlinks')"  onmouseleave="unhlRegion('l-navlinks')"  onclick="focusRegion('l-navlinks')"><div class="ar-pin">Nav Links</div></div>
+        <div class="ar" id="ar-l-ctanav"    style="top:8px;right:8px;width:70px;height:28px"  onmouseenter="hlRegion('l-ctanav')"    onmouseleave="unhlRegion('l-ctanav')"    onclick="focusRegion('l-ctanav')"><div class="ar-pin">CTA Button</div></div>
+        <div class="ar" id="ar-l-hero"      style="top:44px;left:0;right:0;height:200px"      onmouseenter="hlRegion('l-hero')"      onmouseleave="unhlRegion('l-hero')"      onclick="focusRegion('l-hero')"><div class="ar-pin">Hero Section</div></div>
+        <div class="ar" id="ar-l-headline"  style="top:80px;left:50%;transform:translateX(-50%);width:300px;height:22px" onmouseenter="hlRegion('l-headline')" onmouseleave="unhlRegion('l-headline')" onclick="focusRegion('l-headline')"><div class="ar-pin">Headline</div></div>
+        <div class="ar" id="ar-l-cta"       style="top:150px;left:50%;transform:translateX(-50%);width:180px;height:38px" onmouseenter="hlRegion('l-cta')" onmouseleave="unhlRegion('l-cta')" onclick="focusRegion('l-cta')"><div class="ar-pin">CTA Buttons</div></div>
+        <div class="ar" id="ar-l-social"    style="top:244px;left:0;right:0;height:36px"      onmouseenter="hlRegion('l-social')"    onmouseleave="unhlRegion('l-social')"    onclick="focusRegion('l-social')"><div class="ar-pin">Social Proof</div></div>
+        <div class="ar" id="ar-l-features"  style="top:290px;left:0;right:0;height:188px"     onmouseenter="hlRegion('l-features')"  onmouseleave="unhlRegion('l-features')"  onclick="focusRegion('l-features')"><div class="ar-pin">Feature Cards</div></div>
+        <div class="ar" id="ar-l-footer"    style="bottom:0;left:0;right:0;height:42px"       onmouseenter="hlRegion('l-footer')"    onmouseleave="unhlRegion('l-footer')"    onclick="focusRegion('l-footer')"><div class="ar-pin">Footer</div></div>
+      </div>
+    </div>
+
+    <!-- ── DASHBOARD ── -->
+    <div class="mock-frame" id="anatomy-dashboard" style="display:none">
+      <div class="mock-frame-bar">
+        <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+        <div class="mock-url">https://app.appname.io/dashboard</div>
+      </div>
+      <div class="mock-dashboard">
+        <div class="md-sidebar">
+          <div class="md-sidebar-logo"><div class="md-sidebar-logo-box"></div><div class="md-sidebar-logo-text"></div></div>
+          <div class="md-nav-item active"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+        </div>
+        <div class="md-main">
+          <div class="md-topbar">
+            <div class="md-topbar-title"></div>
+            <div class="md-topbar-search"></div>
+            <div class="md-topbar-bell"></div>
+            <div class="md-topbar-avatar"></div>
+          </div>
+          <div class="md-content">
+            <div class="md-kpi-row">
+              <div class="md-kpi"><div class="md-kpi-label"></div><div class="md-kpi-val"></div></div>
+              <div class="md-kpi"><div class="md-kpi-label"></div><div class="md-kpi-val"></div></div>
+              <div class="md-kpi"><div class="md-kpi-label"></div><div class="md-kpi-val"></div></div>
+              <div class="md-kpi"><div class="md-kpi-label"></div><div class="md-kpi-val"></div></div>
+            </div>
+            <div class="md-charts-row">
+              <div class="md-chart">
+                <div class="md-chart-title"></div>
+                <div class="md-chart-bars">
+                  <div class="md-bar" style="height:60%"></div><div class="md-bar" style="height:80%"></div>
+                  <div class="md-bar" style="height:45%"></div><div class="md-bar" style="height:90%"></div>
+                  <div class="md-bar" style="height:70%"></div><div class="md-bar" style="height:55%"></div>
+                  <div class="md-bar" style="height:85%"></div><div class="md-bar" style="height:65%"></div>
+                </div>
+              </div>
+              <div class="md-chart"><div class="md-chart-title"></div></div>
+            </div>
+            <div class="md-table-wrap">
+              <div class="md-table-header"><div class="md-table-title"></div><div class="md-table-btn"></div></div>
+              <div class="md-table-row"><div class="md-cell" style="width:20%"></div><div class="md-cell" style="width:30%"></div><div class="md-cell" style="width:15%"></div><div class="md-cell" style="width:20%"></div></div>
+              <div class="md-table-row"><div class="md-cell" style="width:25%"></div><div class="md-cell" style="width:25%"></div><div class="md-cell" style="width:20%"></div><div class="md-cell" style="width:15%"></div></div>
+              <div class="md-table-row"><div class="md-cell" style="width:18%"></div><div class="md-cell" style="width:35%"></div><div class="md-cell" style="width:12%"></div><div class="md-cell" style="width:22%"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Anatomy regions -->
+        <div class="ar" id="ar-d-sidebar"   style="top:0;left:0;width:160px;bottom:0"          onmouseenter="hlRegion('d-sidebar')"   onmouseleave="unhlRegion('d-sidebar')"   onclick="focusRegion('d-sidebar')"><div class="ar-pin">Sidebar</div></div>
+        <div class="ar" id="ar-d-topbar"    style="top:0;left:160px;right:0;height:44px"       onmouseenter="hlRegion('d-topbar')"    onmouseleave="unhlRegion('d-topbar')"    onclick="focusRegion('d-topbar')"><div class="ar-pin">Top Bar</div></div>
+        <div class="ar" id="ar-d-search"    style="top:9px;left:280px;width:200px;height:26px" onmouseenter="hlRegion('d-search')"    onmouseleave="unhlRegion('d-search')"    onclick="focusRegion('d-search')"><div class="ar-pin">Search</div></div>
+        <div class="ar" id="ar-d-avatar"    style="top:8px;right:10px;width:34px;height:34px"  onmouseenter="hlRegion('d-avatar')"    onmouseleave="unhlRegion('d-avatar')"    onclick="focusRegion('d-avatar')"><div class="ar-pin">Avatar</div></div>
+        <div class="ar" id="ar-d-kpi"       style="top:58px;left:170px;right:10px;height:60px" onmouseenter="hlRegion('d-kpi')"       onmouseleave="unhlRegion('d-kpi')"       onclick="focusRegion('d-kpi')"><div class="ar-pin">KPI Cards</div></div>
+        <div class="ar" id="ar-d-chart"     style="top:126px;left:170px;right:10px;height:130px" onmouseenter="hlRegion('d-chart')"   onmouseleave="unhlRegion('d-chart')"     onclick="focusRegion('d-chart')"><div class="ar-pin">Charts</div></div>
+        <div class="ar" id="ar-d-table"     style="top:264px;left:170px;right:10px;bottom:10px" onmouseenter="hlRegion('d-table')"    onmouseleave="unhlRegion('d-table')"     onclick="focusRegion('d-table')"><div class="ar-pin">Data Table</div></div>
+        <div class="ar" id="ar-d-navitems"  style="top:44px;left:0;width:160px;height:200px"   onmouseenter="hlRegion('d-navitems')"  onmouseleave="unhlRegion('d-navitems')"  onclick="focusRegion('d-navitems')"><div class="ar-pin">Nav Items</div></div>
+      </div>
+    </div>
+
+    <!-- ── DETAIL PAGE ── -->
+    <div class="mock-frame" id="anatomy-detail" style="display:none">
+      <div class="mock-frame-bar">
+        <div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div>
+        <div class="mock-url">https://app.appname.io/users/42</div>
+      </div>
+      <div class="mock-detail">
+        <div class="md2-sidebar">
+          <div class="md-sidebar-logo"><div class="md-sidebar-logo-box"></div><div class="md-sidebar-logo-text"></div></div>
+          <div class="md-nav-item active"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+          <div class="md-nav-item"><div class="md-nav-icon"></div><div class="md-nav-label"></div></div>
+        </div>
+        <div class="md2-main">
+          <div class="md2-topbar">
+            <div class="md2-breadcrumb">
+              <div class="md2-bc-item"></div><div class="md2-bc-sep"></div>
+              <div class="md2-bc-item"></div><div class="md2-bc-sep"></div>
+              <div class="md2-bc-item current"></div>
+            </div>
+          </div>
+          <div class="md2-content">
+            <div class="md2-left">
+              <div class="md2-hero-card">
+                <div class="md2-hero-top">
+                  <div class="md2-avatar-lg"></div>
+                  <div class="md2-title-block"><div class="md2-title"></div><div class="md2-subtitle"></div></div>
+                </div>
+                <div class="md2-tags"><div class="md2-tag"></div><div class="md2-tag"></div><div class="md2-tag"></div></div>
+                <div class="md2-body-lines">
+                  <div class="md2-line" style="width:95%"></div>
+                  <div class="md2-line" style="width:88%"></div>
+                  <div class="md2-line" style="width:72%"></div>
+                </div>
+              </div>
+              <div class="md2-tabs-card">
+                <div class="md2-tab-row">
+                  <div class="md2-tab active"></div><div class="md2-tab"></div><div class="md2-tab"></div>
+                </div>
+                <div class="md2-tab-content">
+                  <div class="md2-line" style="width:90%"></div>
+                  <div class="md2-line" style="width:75%"></div>
+                  <div class="md2-line" style="width:82%"></div>
+                  <div class="md2-line" style="width:60%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="md2-right">
+              <div class="md2-action-card">
+                <div class="md2-action-title"></div>
+                <div class="md2-action-btn"></div>
+                <div class="md2-action-btn ghost"></div>
+              </div>
+              <div class="md2-meta-card">
+                <div class="md2-meta-row"><div class="md2-meta-key"></div><div class="md2-meta-val"></div></div>
+                <div class="md2-meta-row"><div class="md2-meta-key"></div><div class="md2-meta-val"></div></div>
+                <div class="md2-meta-row"><div class="md2-meta-key"></div><div class="md2-meta-val"></div></div>
+                <div class="md2-meta-row"><div class="md2-meta-key"></div><div class="md2-meta-val"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Anatomy regions -->
+        <div class="ar" id="ar-dt-sidebar"    style="top:0;left:0;width:160px;bottom:0"             onmouseenter="hlRegion('dt-sidebar')"    onmouseleave="unhlRegion('dt-sidebar')"    onclick="focusRegion('dt-sidebar')"><div class="ar-pin">Sidebar</div></div>
+        <div class="ar" id="ar-dt-topbar"     style="top:0;left:160px;right:0;height:44px"          onmouseenter="hlRegion('dt-topbar')"     onmouseleave="unhlRegion('dt-topbar')"     onclick="focusRegion('dt-topbar')"><div class="ar-pin">Top Bar</div></div>
+        <div class="ar" id="ar-dt-breadcrumb" style="top:8px;left:168px;width:280px;height:28px"    onmouseenter="hlRegion('dt-breadcrumb')" onmouseleave="unhlRegion('dt-breadcrumb')" onclick="focusRegion('dt-breadcrumb')"><div class="ar-pin">Breadcrumb</div></div>
+        <div class="ar" id="ar-dt-herocard"   style="top:58px;left:170px;right:198px;height:150px"  onmouseenter="hlRegion('dt-herocard')"   onmouseleave="unhlRegion('dt-herocard')"   onclick="focusRegion('dt-herocard')"><div class="ar-pin">Detail Card</div></div>
+        <div class="ar" id="ar-dt-tabs"       style="top:216px;left:170px;right:198px;bottom:10px"  onmouseenter="hlRegion('dt-tabs')"       onmouseleave="unhlRegion('dt-tabs')"       onclick="focusRegion('dt-tabs')"><div class="ar-pin">Tab Panel</div></div>
+        <div class="ar" id="ar-dt-actions"    style="top:58px;right:10px;width:180px;height:90px"   onmouseenter="hlRegion('dt-actions')"    onmouseleave="unhlRegion('dt-actions')"    onclick="focusRegion('dt-actions')"><div class="ar-pin">Action Panel</div></div>
+        <div class="ar" id="ar-dt-meta"       style="top:156px;right:10px;width:180px;bottom:10px"  onmouseenter="hlRegion('dt-meta')"       onmouseleave="unhlRegion('dt-meta')"       onclick="focusRegion('dt-meta')"><div class="ar-pin">Metadata Panel</div></div>
+      </div>
+    </div>
+
+    <!-- Legend panel -->
+    <div class="anatomy-legend" id="anatomyLegend"></div>
+  </div>
+
+</div>
+
+
+<!-- ======= USER FLOWS TAB ======= -->
+<div id="tab-flows" class="content">
+
+  <div class="flows-controls">
+    <button class="flow-select-btn active" onclick="switchFlow('login', this)">Login Flow</button>
+    <button class="flow-select-btn" onclick="switchFlow('signup', this)">Sign Up + Onboarding</button>
+    <button class="flow-select-btn" onclick="switchFlow('forgot', this)">Forgot Password</button>
+  </div>
+
+  <div class="flow-desc" id="flowDesc"></div>
+
+  <div class="flow-mode-bar">
+    <span class="flow-mode-lbl">View</span>
+    <button class="flow-mode-btn active" id="btn-map" onclick="switchFlowMode('map')">Screen Map</button>
+    <button class="flow-mode-btn" id="btn-step" onclick="switchFlowMode('step')">Step Through</button>
+  </div>
+
+  <!-- Progress bar (step mode only) -->
+  <div class="flow-progress" id="flowProgress" style="display:none"></div>
+
+  <!-- MAP VIEW -->
+  <div class="flow-map-wrap" id="flowMapWrap">
+    <div class="flow-map" id="flowMap"></div>
+  </div>
+
+  <!-- STEP-THROUGH VIEW -->
+  <div class="flow-step-wrap" id="flowStepWrap" style="display:none">
+    <div class="flow-step-screen">
+      <div class="fss-bar">
+        <div class="fss-dot" style="background:#ef4444"></div>
+        <div class="fss-dot" style="background:#f59e0b"></div>
+        <div class="fss-dot" style="background:#22c55e"></div>
+        <div class="fss-url" id="stepUrl"></div>
+      </div>
+      <div class="fss-content" id="stepScreen"></div>
+    </div>
+    <div class="flow-step-info" id="stepInfo"></div>
+  </div>
+
+</div>
+
+
+<!-- ======= VOCABULARY TAB ======= -->
+<div id="tab-vocab" class="content">
+
+  <div class="vocab-header">
+    <div class="vocab-header-title">Web App <span>Vocabulary</span></div>
+    <div class="vocab-header-desc">Terms organised into four groups — Layout, Action, Data, and Auth. Each definition links back to the relevant demo on this site. Use this as a study reference or a prompt engineering cheat sheet.</div>
+  </div>
+
+  <div class="vocab-search-wrap">
+    <span class="vocab-search-icon">⌕</span>
+    <input class="vocab-search" id="vocabSearch" type="text" placeholder="Search terms…" oninput="filterVocab()">
+  </div>
+
+  <div class="vocab-filters">
+    <button class="vocab-filter active-all" onclick="setVocabGroup('all', this)">All</button>
+    <button class="vocab-filter" onclick="setVocabGroup('layout', this)">Layout</button>
+    <button class="vocab-filter" onclick="setVocabGroup('action', this)">Action</button>
+    <button class="vocab-filter" onclick="setVocabGroup('data', this)">Data</button>
+    <button class="vocab-filter" onclick="setVocabGroup('auth', this)">Auth</button>
+  </div>
+
+  <div class="vocab-results-count" id="vocabCount"></div>
+
+  <div class="vocab-body" id="vocabBody">
+    <div class="vocab-empty" id="vocabEmpty">No terms match your search.</div>
+  </div>
+
+</div>
+
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-box">
     <div class="modal-title" data-tip="Modal title: short, action-oriented (e.g., 'Confirm deletion')">Confirm Action</div>
@@ -2130,8 +3039,12 @@ function toggleDark() {
   // Persist preference — in a real app this would sync to a user profile
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 }
-// Restore saved preference on load
-if (localStorage.getItem('theme') === 'light') {
+// Default to light mode; restore saved preference on load
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+  // user explicitly chose dark — respect it
+} else {
+  // light is the default
   document.documentElement.classList.add('light');
   document.getElementById('darkToggle').classList.remove('on');
   document.getElementById('toggleLabel').textContent = 'Light mode ON';
@@ -2579,6 +3492,883 @@ function resHeaderTip(k) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+// ────────────────────────────────────────────────────────────────
+
+
+// ── APP ANATOMY ─────────────────────────────────────────────────
+const anatomyData = {
+  landing: {
+    desc: 'The <strong>Landing Page</strong> is the first screen a visitor sees. Its job is to communicate value, build trust, and convert visitors into users. Hover any region on the diagram or click a label to highlight it.',
+    regions: {
+      'l-navbar':   { name: 'Navbar', def: 'Persistent top bar containing the logo, navigation links, and primary CTA. Visible on every page.', tag: 'Navigation' },
+      'l-logo':     { name: 'Logo', def: 'Brand identity mark — clicking it always navigates to the home page.', tag: 'Branding' },
+      'l-navlinks': { name: 'Nav Links', def: 'Links to major sections of the site (Features, Pricing, Docs). Usually hidden on mobile behind a hamburger menu.', tag: 'Navigation' },
+      'l-ctanav':   { name: 'CTA Button (Nav)', def: 'Call-to-action in the navbar — typically "Sign up" or "Get started". High contrast to stand out.', tag: 'Conversion' },
+      'l-hero':     { name: 'Hero Section', def: 'The largest, most prominent section — the first thing a visitor reads. Contains headline, subheadline, and primary CTA.', tag: 'Layout' },
+      'l-headline': { name: 'Headline', def: 'The main value proposition in one sentence. Often the most A/B tested copy on the page.', tag: 'Content' },
+      'l-cta':      { name: 'CTA Buttons', def: 'Call-to-action buttons — primary (filled) leads to sign-up, secondary (ghost) may lead to a demo or docs.', tag: 'Conversion' },
+      'l-social':   { name: 'Social Proof', def: 'Logos, testimonials, or user counts that establish credibility. Placed just below the hero to reduce friction.', tag: 'Trust' },
+      'l-features': { name: 'Feature Cards', def: 'Grid of cards describing key capabilities. Icon + title + description is the standard pattern.', tag: 'Content' },
+      'l-footer':   { name: 'Footer', def: 'Bottom of the page — links to legal pages, secondary nav, and social media. Also reinforces brand.', tag: 'Navigation' },
+    }
+  },
+  dashboard: {
+    desc: 'The <strong>Dashboard</strong> is the home screen after login. It gives the user a high-level overview of their data and quick access to key actions.',
+    regions: {
+      'd-sidebar':  { name: 'Sidebar', def: 'Persistent left-side navigation. Contains links to all major sections of the app. Active item is highlighted.', tag: 'Navigation' },
+      'd-navitems': { name: 'Nav Items', def: 'Individual links in the sidebar — icon + label. The active item tells the user where they are in the app.', tag: 'Navigation' },
+      'd-topbar':   { name: 'Top Bar', def: 'Horizontal bar at the top of the main area — holds the page title, search, notifications, and user avatar.', tag: 'Chrome' },
+      'd-search':   { name: 'Search', def: 'Global search input — lets users find records anywhere in the app without navigating.', tag: 'Input' },
+      'd-avatar':   { name: 'User Avatar', def: 'Represents the logged-in user. Clicking opens a dropdown with profile, settings, and logout options.', tag: 'Auth' },
+      'd-kpi':      { name: 'KPI Cards', def: 'Key Performance Indicator cards — each shows a single metric (revenue, users, conversions). The at-a-glance summary row.', tag: 'Data' },
+      'd-chart':    { name: 'Charts', def: 'Visual representation of data over time. Bar, line, and pie charts are the most common dashboard chart types.', tag: 'Data' },
+      'd-table':    { name: 'Data Table', def: 'Tabular list of records — sortable, filterable, paginated. The core of most SaaS dashboards.', tag: 'Data' },
+    }
+  },
+  detail: {
+    desc: 'The <strong>Detail Page</strong> shows a single record in full — a user, order, or project. It\'s reached by clicking a row in a table or list.',
+    regions: {
+      'dt-sidebar':    { name: 'Sidebar', def: 'Same persistent navigation as the dashboard — always present so users can jump to any section.', tag: 'Navigation' },
+      'dt-topbar':     { name: 'Top Bar', def: 'Contains the breadcrumb trail and sometimes action buttons for the current record.', tag: 'Chrome' },
+      'dt-breadcrumb': { name: 'Breadcrumb', def: 'Trail showing the user\'s location in the hierarchy: Home → Users → Jane Smith. Clicking any segment navigates back.', tag: 'Navigation' },
+      'dt-herocard':   { name: 'Detail Card', def: 'Primary card showing the key information about the record — avatar, name, status, and summary fields.', tag: 'Content' },
+      'dt-tabs':       { name: 'Tab Panel', def: 'Organises related secondary content (Activity, Settings, Notes) without leaving the page.', tag: 'Layout' },
+      'dt-actions':    { name: 'Action Panel', def: 'Right-side panel with contextual action buttons — Edit, Delete, Export. Grouped to keep them discoverable.', tag: 'Actions' },
+      'dt-meta':       { name: 'Metadata Panel', def: 'Key-value pairs showing record metadata — created date, owner, ID, status. Secondary information that supports the main content.', tag: 'Data' },
+    }
+  }
+};
+
+let currentAnatomy = 'landing';
+
+function switchAnatomy(view, btn) {
+  currentAnatomy = view;
+  document.querySelectorAll('.anatomy-view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['landing','dashboard','detail'].forEach(v => {
+    document.getElementById('anatomy-' + v).style.display = v === view ? 'block' : 'none';
+  });
+  document.getElementById('anatomyDesc').innerHTML = anatomyData[view].desc;
+  buildLegend(view);
+}
+
+function buildLegend(view) {
+  const legend = document.getElementById('anatomyLegend');
+  const regions = anatomyData[view].regions;
+  legend.innerHTML = Object.entries(regions).map(([id, r]) => `
+    <div class="legend-item" id="leg-${id}"
+      onmouseenter="hlRegion('${id}')" onmouseleave="unhlRegion('${id}')"
+      onclick="focusRegion('${id}')">
+      <div class="legend-name">${r.name}</div>
+      <div class="legend-def">${r.def}</div>
+      <span class="legend-tag">${r.tag}</span>
+    </div>`).join('');
+}
+
+function hlRegion(id) {
+  const ar = document.getElementById('ar-' + id);
+  const leg = document.getElementById('leg-' + id);
+  if (ar) ar.classList.add('highlighted');
+  if (leg) leg.classList.add('highlighted');
+}
+function unhlRegion(id) {
+  const ar = document.getElementById('ar-' + id);
+  const leg = document.getElementById('leg-' + id);
+  if (ar) ar.classList.remove('highlighted');
+  if (leg) leg.classList.remove('highlighted');
+}
+function focusRegion(id) {
+  hlRegion(id);
+  const leg = document.getElementById('leg-' + id);
+  if (leg) leg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Init
+buildLegend('landing');
+// ────────────────────────────────────────────────────────────────
+
+
+// ── USER FLOWS ───────────────────────────────────────────────────
+
+const flowData = {
+
+  login: {
+    desc: 'The <strong>Login Flow</strong> authenticates an existing user and grants them access to the app. It is the most-used flow in any SaaS product. Every step has a vocabulary term worth knowing.',
+    steps: [
+      {
+        id: 'login-landing',
+        name: 'Landing / Entry',
+        url: 'appname.io',
+        arrow: 'Click "Sign in"',
+        screen: `
+          <div class="ms-title"></div>
+          <div class="ms-sub"></div>
+          <div class="ms-sub" style="width:60%"></div>
+          <div style="display:flex;gap:6px;margin-top:10px">
+            <div class="ms-btn primary" style="flex:1"></div>
+            <div class="ms-btn ghost" style="flex:1"></div>
+          </div>`,
+        terms: [
+          { name: 'Entry Point', def: 'The screen or link where a flow begins — often a CTA button on the landing page.' },
+          { name: 'CTA (Call to Action)', def: 'A button or link that prompts the user to take a specific next step.' },
+        ]
+      },
+      {
+        id: 'login-form',
+        name: 'Login Form',
+        url: 'appname.io/login',
+        arrow: 'Submit credentials',
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input focus"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-forgot-link"></div>
+          <div class="ms-btn primary"></div>
+          <div class="ms-divider"></div>
+          <div class="ms-oauth-row"><div class="ms-oauth-btn"></div><div class="ms-oauth-btn"></div></div>`,
+        terms: [
+          { name: 'Authentication', def: 'Verifying that a user is who they claim to be — usually via email + password or OAuth.' },
+          { name: 'OAuth', def: 'A protocol that lets users sign in with a third-party account (Google, GitHub) without sharing their password.' },
+          { name: 'Credential', def: 'The information used to prove identity — typically an email address and password.' },
+        ]
+      },
+      {
+        id: 'login-validate',
+        name: 'Validation',
+        url: 'appname.io/login',
+        arrow: 'Server checks credentials',
+        isError: false,
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input valid"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input valid"></div></div>
+          <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--accent);opacity:0.7;flex-shrink:0"></div>
+            <div class="ms-line" style="width:60%"></div>
+          </div>
+          <div class="ms-btn primary"></div>`,
+        terms: [
+          { name: 'Client-side validation', def: 'Checks run in the browser before sending data to the server — instant feedback, no round-trip.' },
+          { name: 'Server-side validation', def: 'Checks run on the server — the authoritative source of truth. Cannot be bypassed by the client.' },
+          { name: 'Form state', def: 'The current condition of a form field — pristine, dirty, valid, invalid, or disabled.' },
+        ]
+      },
+      {
+        id: 'login-error',
+        name: 'Auth Error',
+        url: 'appname.io/login',
+        arrow: 'Wrong password',
+        isError: true,
+        screen: `
+          <div class="ms-error-box"><div class="ms-error-line"></div><div class="ms-error-line" style="width:70%;margin-top:3px"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input error"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input error"></div></div>
+          <div class="ms-btn primary"></div>`,
+        terms: [
+          { name: 'Error state', def: 'Visual feedback indicating something went wrong — red borders, error messages, shake animations.' },
+          { name: 'Generic error message', def: 'Intentionally vague messages like "Invalid email or password" that prevent user enumeration attacks.' },
+        ]
+      },
+      {
+        id: 'login-session',
+        name: 'Session Created',
+        url: 'appname.io/login',
+        arrow: 'JWT issued',
+        screen: `
+          <div style="text-align:center;padding:10px 0">
+            <div style="font-size:24px;margin-bottom:6px">🔒→🔓</div>
+            <div class="ms-title sm" style="margin:0 auto 6px"></div>
+            <div class="ms-sub" style="width:80%;margin:0 auto"></div>
+          </div>
+          <div style="background:rgba(91,156,246,0.08);border:1px solid rgba(91,156,246,0.2);border-radius:4px;padding:6px 8px;font-size:9px;color:var(--accent2);font-family:var(--font-mono)">Set-Cookie: session=eyJ...<br>HttpOnly; Secure; SameSite=Lax</div>`,
+        terms: [
+          { name: 'Session', def: 'A server-side record of an authenticated user — linked to the client via a cookie or token.' },
+          { name: 'JWT (JSON Web Token)', def: 'A signed, self-contained token that proves identity — the server can verify it without a database lookup.' },
+          { name: 'HttpOnly cookie', def: 'A cookie the browser cannot read with JavaScript — protects session tokens from XSS attacks.' },
+        ]
+      },
+      {
+        id: 'login-dashboard',
+        name: 'Dashboard',
+        url: 'app.appname.io/dashboard',
+        arrow: null,
+        screen: `
+          <div class="ms-kpi-row">
+            <div class="ms-kpi"><div class="ms-sub"></div><div class="ms-kpi-v"></div></div>
+            <div class="ms-kpi"><div class="ms-sub"></div><div class="ms-kpi-v"></div></div>
+          </div>
+          <div style="height:60px;background:var(--surface2);border-radius:4px;border:1px solid var(--border);margin-bottom:8px;display:flex;align-items:flex-end;padding:6px;gap:3px">
+            ${[60,80,45,90,70,55,85].map(h=>`<div style="flex:1;height:${h}%;background:var(--accent2);opacity:0.4;border-radius:2px 2px 0 0"></div>`).join('')}
+          </div>
+          <div class="ms-row"><div class="ms-check"></div><div class="ms-line"></div></div>
+          <div class="ms-row"><div class="ms-check" style="opacity:0.3"></div><div class="ms-line"></div></div>`,
+        terms: [
+          { name: 'Redirect', def: 'Automatically sending the user to a new URL after an action completes — e.g., login → dashboard.' },
+          { name: 'Protected route', def: 'A page that requires authentication. Unauthenticated users are redirected to the login page.' },
+          { name: 'Persistent session', def: 'A session that survives the browser being closed — enabled by "Remember me" / long-lived tokens.' },
+        ]
+      }
+    ]
+  },
+
+  signup: {
+    desc: 'The <strong>Sign Up + Onboarding Flow</strong> creates a new account and guides the user to their first meaningful moment in the app — sometimes called the "aha moment". Retention depends heavily on how well this flow works.',
+    steps: [
+      {
+        id: 'su-landing',
+        name: 'Landing / CTA',
+        url: 'appname.io',
+        arrow: 'Click "Get started"',
+        screen: `
+          <div class="ms-title"></div>
+          <div class="ms-sub"></div>
+          <div class="ms-btn accent" style="margin-top:10px"></div>
+          <div class="ms-link"></div>`,
+        terms: [
+          { name: 'Conversion', def: 'When a visitor takes the desired action — signing up, purchasing, or starting a trial.' },
+          { name: 'Above the fold', def: 'Content visible without scrolling — where the primary CTA should always live.' },
+        ]
+      },
+      {
+        id: 'su-form',
+        name: 'Sign Up Form',
+        url: 'appname.io/signup',
+        arrow: 'Submit form',
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input valid"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input valid"></div></div>
+          <div class="ms-field">
+            <div class="ms-label"></div>
+            <div class="ms-input focus"></div>
+            <div class="ms-strength" style="width:65%;background:var(--accent3)"></div>
+          </div>
+          <div class="ms-btn accent"></div>`,
+        terms: [
+          { name: 'Registration', def: 'The act of creating a new user account — collects minimum required data (email, password).' },
+          { name: 'Password strength meter', def: 'Real-time feedback on password quality — guides users toward secure choices before submitting.' },
+          { name: 'Progressive disclosure', def: 'Showing only the fields needed now — ask for more information after the user has committed.' },
+        ]
+      },
+      {
+        id: 'su-verify',
+        name: 'Email Verification',
+        url: 'appname.io/verify',
+        arrow: 'Click email link',
+        screen: `
+          <div class="ms-email-icon">📧</div>
+          <div class="ms-title sm" style="margin:0 auto 6px;width:70%"></div>
+          <div class="ms-sub" style="width:90%"></div>
+          <div class="ms-sub" style="width:70%"></div>
+          <div class="ms-divider"></div>
+          <div class="ms-link"></div>`,
+        terms: [
+          { name: 'Email verification', def: 'Confirming the user owns the email address they registered with — prevents fake accounts.' },
+          { name: 'Magic link', def: 'A one-time URL emailed to the user that logs them in or verifies their address without a password.' },
+          { name: 'Pending state', def: 'A screen that tells the user to do something elsewhere (check email) before continuing.' },
+        ]
+      },
+      {
+        id: 'su-onboard1',
+        name: 'Onboarding Step 1',
+        url: 'appname.io/onboarding/1',
+        arrow: 'Next →',
+        screen: `
+          <div class="ms-onboard-progress"><div class="ms-onboard-fill" style="width:33%"></div></div>
+          <div class="ms-title sm"></div>
+          <div class="ms-step-list">
+            <div class="ms-step-row"><div class="ms-step-dot done"></div><div class="ms-line"></div></div>
+            <div class="ms-step-row"><div class="ms-step-dot active"></div><div class="ms-line"></div></div>
+            <div class="ms-step-row"><div class="ms-step-dot"></div><div class="ms-line"></div></div>
+          </div>
+          <div class="ms-btn accent" style="margin-top:10px"></div>`,
+        terms: [
+          { name: 'Onboarding', def: 'A guided sequence that helps new users understand the product and reach their first success quickly.' },
+          { name: 'Progress indicator', def: 'A bar or step counter showing how far through a multi-step process the user is.' },
+          { name: 'Wizard', def: 'A multi-step form or flow that collects information or configures something in sequential steps.' },
+        ]
+      },
+      {
+        id: 'su-onboard2',
+        name: 'Onboarding Step 2',
+        url: 'appname.io/onboarding/2',
+        arrow: 'Next →',
+        screen: `
+          <div class="ms-onboard-progress"><div class="ms-onboard-fill" style="width:66%"></div></div>
+          <div class="ms-title sm"></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-btn accent"></div>`,
+        terms: [
+          { name: 'Profile setup', def: 'Collecting additional user information post-registration — name, role, preferences.' },
+          { name: 'Skip', def: 'Allowing users to bypass optional onboarding steps — reduces friction, increases completion rate.' },
+        ]
+      },
+      {
+        id: 'su-dashboard',
+        name: 'First Dashboard',
+        url: 'app.appname.io/dashboard',
+        arrow: null,
+        screen: `
+          <div class="ms-onboard-progress"><div class="ms-onboard-fill" style="width:100%;background:var(--accent)"></div></div>
+          <div style="background:rgba(126,232,162,0.08);border:1px solid rgba(126,232,246,0.2);border-radius:5px;padding:8px;margin-bottom:8px;">
+            <div class="ms-title sm" style="width:80%"></div>
+            <div class="ms-sub" style="width:95%"></div>
+          </div>
+          <div class="ms-kpi-row">
+            <div class="ms-kpi"><div class="ms-sub"></div><div class="ms-kpi-v"></div></div>
+            <div class="ms-kpi"><div class="ms-sub"></div><div class="ms-kpi-v"></div></div>
+          </div>`,
+        terms: [
+          { name: 'Aha moment', def: 'The instant a new user first experiences the core value of the product — what onboarding is designed to reach.' },
+          { name: 'Empty state', def: 'What a screen looks like when there is no data yet — should guide the user to their first action.' },
+          { name: 'Activation', def: 'When a new user completes a key action that predicts long-term retention — a product metric.' },
+        ]
+      }
+    ]
+  },
+
+  forgot: {
+    desc: 'The <strong>Forgot Password Flow</strong> lets users regain access without support intervention. It uses a time-limited, single-use token sent by email. Security and clarity are the two design priorities.',
+    steps: [
+      {
+        id: 'fp-login',
+        name: 'Login Screen',
+        url: 'appname.io/login',
+        arrow: 'Click "Forgot password"',
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-forgot-link"></div>
+          <div class="ms-btn primary"></div>`,
+        terms: [
+          { name: 'Forgot password link', def: 'A text link on the login form that starts the password reset flow — always placed near the password field.' },
+          { name: 'Account recovery', def: 'Any mechanism that lets a user regain access to their account without their current credentials.' },
+        ]
+      },
+      {
+        id: 'fp-request',
+        name: 'Request Reset',
+        url: 'appname.io/forgot-password',
+        arrow: 'Submit email',
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-sub" style="width:95%"></div>
+          <div class="ms-field" style="margin-top:8px"><div class="ms-label"></div><div class="ms-input focus"></div></div>
+          <div class="ms-btn primary"></div>`,
+        terms: [
+          { name: 'Reset request', def: 'The user submits their email to trigger a password reset — server generates a token regardless of whether the account exists.' },
+          { name: 'User enumeration', def: 'A security risk where different responses for valid vs. invalid emails reveal which accounts exist. Always return the same message.' },
+        ]
+      },
+      {
+        id: 'fp-sent',
+        name: 'Email Sent',
+        url: 'appname.io/forgot-password/sent',
+        arrow: 'User checks email',
+        screen: `
+          <div class="ms-email-icon">📬</div>
+          <div class="ms-title sm" style="margin:0 auto 6px;width:80%"></div>
+          <div class="ms-sub" style="width:95%"></div>
+          <div class="ms-sub" style="width:75%"></div>
+          <div style="font-size:9px;color:var(--accent3);font-family:var(--font-mono);text-align:center;margin-top:6px">Expires in 15 minutes</div>`,
+        terms: [
+          { name: 'Confirmation screen', def: 'A screen that tells the user what to do next — here, check email — without revealing whether the account exists.' },
+          { name: 'Token TTL', def: 'Time To Live — how long the reset link is valid. 15–30 minutes is standard to balance security and usability.' },
+        ]
+      },
+      {
+        id: 'fp-token',
+        name: 'Token Validated',
+        url: 'appname.io/reset-password?token=…',
+        arrow: 'Token verified',
+        screen: `
+          <div style="background:rgba(126,232,162,0.08);border:1px solid rgba(126,232,162,0.2);border-radius:4px;padding:6px 8px;font-size:9px;color:var(--accent);font-family:var(--font-mono);margin-bottom:8px">✓ Token valid · expires in 8m</div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-btn accent"></div>`,
+        terms: [
+          { name: 'Reset token', def: 'A cryptographically random string stored as a hash on the server — included in the emailed link as a query parameter.' },
+          { name: 'Single-use token', def: 'A token that is invalidated immediately after it is used — prevents replay attacks.' },
+          { name: 'Query parameter', def: 'Data appended to a URL after "?" — e.g., /reset?token=abc123. Used here to pass the token to the reset page.' },
+        ]
+      },
+      {
+        id: 'fp-reset',
+        name: 'New Password',
+        url: 'appname.io/reset-password',
+        arrow: 'Password updated',
+        screen: `
+          <div class="ms-title sm"></div>
+          <div class="ms-field">
+            <div class="ms-label"></div>
+            <div class="ms-input valid"></div>
+            <div class="ms-strength" style="width:90%;background:var(--accent)"></div>
+          </div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input valid"></div></div>
+          <div class="ms-btn accent"></div>`,
+        terms: [
+          { name: 'Password confirmation field', def: 'A second password input that must match the first — prevents typos when setting a new password.' },
+          { name: 'Session invalidation', def: 'After a password reset, all existing sessions are revoked — forces other devices to log in again.' },
+        ]
+      },
+      {
+        id: 'fp-done',
+        name: 'Success + Login',
+        url: 'appname.io/login',
+        arrow: null,
+        screen: `
+          <div style="text-align:center;padding:8px 0 10px">
+            <div style="font-size:22px;margin-bottom:6px">✓</div>
+            <div class="ms-title sm" style="margin:0 auto 6px;width:70%"></div>
+            <div class="ms-sub" style="width:90%;margin:0 auto 10px"></div>
+          </div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-field"><div class="ms-label"></div><div class="ms-input"></div></div>
+          <div class="ms-btn primary"></div>`,
+        terms: [
+          { name: 'Success state', def: 'Visual confirmation that an action completed — green checkmark, confirmation message, redirect.' },
+          { name: 'Re-authentication', def: 'After a password reset the user must log in fresh — their old session was invalidated for security.' },
+        ]
+      }
+    ]
+  }
+};
+
+let currentFlow = 'login';
+let currentFlowMode = 'map';
+let currentStep = 0;
+
+function switchFlow(id, btn) {
+  currentFlow = id;
+  currentStep = 0;
+  document.querySelectorAll('.flow-select-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('flowDesc').innerHTML = flowData[id].desc;
+  if (currentFlowMode === 'map') renderMap(id);
+  else renderStep(id, 0);
+}
+
+function switchFlowMode(mode) {
+  currentFlowMode = mode;
+  document.getElementById('btn-map').classList.toggle('active', mode === 'map');
+  document.getElementById('btn-step').classList.toggle('active', mode === 'step');
+  document.getElementById('flowMapWrap').style.display = mode === 'map' ? 'block' : 'none';
+  document.getElementById('flowStepWrap').style.display = mode === 'step' ? 'flex' : 'none';
+  document.getElementById('flowProgress').style.display = mode === 'step' ? 'flex' : 'none';
+  if (mode === 'map') renderMap(currentFlow);
+  else { currentStep = 0; renderStep(currentFlow, 0); }
+}
+
+function renderMap(flowId) {
+  const steps = flowData[flowId].steps;
+  const map = document.getElementById('flowMap');
+  map.innerHTML = steps.map((s, i) => {
+    const isError = s.isError;
+    const arrowHtml = s.arrow ? `
+      <div class="fmap-arrow ${isError ? 'error' : ''}">
+        <div class="fmap-arrow-line"></div>
+        <div class="fmap-arrow-label">${s.arrow}</div>
+      </div>` : '';
+    return `
+      <div class="fmap-col" data-tip="${s.name} — click to step through">
+        <div class="fmap-step-num ${isError ? 'error' : ''}">${i+1}</div>
+        <div class="fmap-screen ${isError ? 'error-screen' : ''}" onclick="jumpToStep(${i})">
+          <div class="fmap-bar">
+            <div class="fmap-dot" style="background:#ef4444"></div>
+            <div class="fmap-dot" style="background:#f59e0b"></div>
+            <div class="fmap-dot" style="background:#22c55e"></div>
+          </div>
+          <div class="fmap-content">
+            <div class="fmap-title">${s.name}</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">${s.url}</div>
+            ${s.screen}
+          </div>
+        </div>
+        <div class="fmap-label">${s.terms[0] ? s.terms[0].name : ''}</div>
+      </div>
+      ${i < steps.length - 1 ? arrowHtml : ''}`;
+  }).join('');
+}
+
+function renderStep(flowId, stepIdx) {
+  const steps = flowData[flowId].steps;
+  const s = steps[stepIdx];
+  const total = steps.length;
+
+  // URL bar
+  document.getElementById('stepUrl').textContent = s.url;
+
+  // Screen
+  document.getElementById('stepScreen').innerHTML = s.screen;
+
+  // Info panel
+  const termsHtml = s.terms.map(t => `
+    <div class="fsi-term">
+      <div class="fsi-term-name">${t.name}</div>
+      <div class="fsi-term-def">${t.def}</div>
+    </div>`).join('');
+
+  document.getElementById('stepInfo').innerHTML = `
+    <div class="fsi-num">Step ${stepIdx + 1} of ${total}</div>
+    <div class="fsi-title">${s.name}</div>
+    <div class="fsi-desc">${s.arrow ? `<strong>Next action:</strong> ${s.arrow}` : '<strong>Flow complete</strong> — user has reached their goal.'}</div>
+    <div class="fsi-terms">${termsHtml}</div>
+    <div class="fsi-nav">
+      <button class="fsi-nav-btn prev" onclick="goStep(-1)" ${stepIdx === 0 ? 'disabled' : ''}>← Back</button>
+      <button class="fsi-nav-btn next" onclick="goStep(1)" ${stepIdx === total - 1 ? 'disabled' : ''}>${stepIdx === total - 1 ? 'Done ✓' : 'Next →'}</button>
+      <span class="fsi-step-of">${stepIdx + 1} / ${total}</span>
+    </div>`;
+
+  // Progress bar
+  const prog = document.getElementById('flowProgress');
+  prog.innerHTML = steps.map((st, i) => {
+    const cls = i < stepIdx ? 'done' : i === stepIdx ? 'current' : '';
+    const connCls = i < stepIdx ? 'done' : '';
+    return `
+      <div class="fp-step-pill" onclick="jumpToStep(${i})">
+        <div class="fp-step-circle ${cls} ${st.isError && i===stepIdx ? 'err' : ''}">${i+1}</div>
+        <span class="fp-step-name ${i===stepIdx?'current':''}">${st.name}</span>
+      </div>
+      ${i < steps.length - 1 ? `<div class="fp-connector ${connCls}"></div>` : ''}`;
+  }).join('');
+}
+
+function goStep(dir) {
+  const steps = flowData[currentFlow].steps;
+  currentStep = Math.max(0, Math.min(steps.length - 1, currentStep + dir));
+  renderStep(currentFlow, currentStep);
+}
+
+function jumpToStep(idx) {
+  currentStep = idx;
+  switchFlowMode('step');
+  renderStep(currentFlow, idx);
+}
+
+// Init
+switchFlow('login', document.querySelector('.flow-select-btn'));
+// ────────────────────────────────────────────────────────────────
+
+
+// ── VOCABULARY ───────────────────────────────────────────────────
+const vocabTerms = [
+
+  // ── LAYOUT ──────────────────────────────────────────────────
+  { term: 'Viewport', group: 'layout',
+    def: 'The visible area of the browser window — everything the user can see without scrolling.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Breakpoint', group: 'layout',
+    def: 'A screen width at which the layout changes — e.g., below 768px switch from 3 columns to 1.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Grid', group: 'layout',
+    def: 'An invisible system of columns and gutters that organises content into consistent horizontal and vertical positions.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Gutter', group: 'layout',
+    def: 'The gap between grid columns — keeps content from visually crowding together.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Container', group: 'layout',
+    def: 'A max-width wrapper that centres page content and prevents it from stretching too wide on large screens.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Hero Section', group: 'layout',
+    def: 'The large, prominent section at the top of a landing page — holds the headline, subheadline, and primary CTA.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Navbar / Navigation Bar', group: 'layout',
+    def: 'A persistent horizontal bar at the top of the page containing the logo, nav links, and primary action.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Sidebar', group: 'layout',
+    def: 'A vertical navigation panel on the left (or right) of the main content area — common in dashboards.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Top Bar', group: 'layout',
+    def: 'The horizontal bar at the top of the main content area — holds page title, search, and user avatar.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Footer', group: 'layout',
+    def: 'The bottom section of a page — contains legal links, secondary navigation, and social icons.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Card', group: 'layout',
+    def: 'A contained, bordered block that groups related content — the most common unit of content in modern UIs.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Panel', group: 'layout',
+    def: 'A section of the UI dedicated to a specific purpose — e.g., an action panel or metadata panel on a detail page.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Whitespace / Negative Space', group: 'layout',
+    def: 'Empty space around and between elements — improves readability and directs attention.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Above the Fold', group: 'layout',
+    def: 'Content visible without scrolling. The most important content — especially the CTA — should always be above the fold.',
+    link: 'User Flows', tab: 'flows' },
+  { term: 'Responsive Design', group: 'layout',
+    def: 'A design approach where the layout adapts fluidly to any screen size using flexible grids, images, and CSS media queries.',
+    link: 'Responsive Layout', tab: 'frontend' },
+  { term: 'Tab Panel', group: 'layout',
+    def: 'A UI pattern that organises related content into named tabs — only one panel is visible at a time.',
+    link: 'Tab Panels', tab: 'frontend' },
+  { term: 'Modal', group: 'layout',
+    def: 'A dialog that overlays the page, blocking interaction with the background until the user responds.',
+    link: 'Modal Dialog', tab: 'frontend' },
+  { term: 'Nav Drawer', group: 'layout',
+    def: 'A panel that slides in from the edge of the screen, triggered by a hamburger icon — contains the main navigation.',
+    link: 'Nav Drawer', tab: 'frontend' },
+  { term: 'Breadcrumb', group: 'layout',
+    def: 'A trail of links showing the user\'s location in the app hierarchy — e.g., Home › Users › Jane Smith.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Skeleton Loader', group: 'layout',
+    def: 'A placeholder UI that mimics the shape of content while it loads — reduces perceived wait time.',
+    link: 'Skeleton / Loading State', tab: 'frontend' },
+  { term: 'Progress Bar', group: 'layout',
+    def: 'A bar that fills proportionally to show how far through a process the user is — uploads, onboarding, profile completion.',
+    link: 'Progress Bars', tab: 'frontend' },
+
+  // ── ACTION ──────────────────────────────────────────────────
+  { term: 'Call to Action (CTA)', group: 'action',
+    def: 'A button or link that prompts the user to take a specific next step — "Sign up", "Get started", "Buy now".',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Submit', group: 'action',
+    def: 'Sending form data to the server for processing — triggers client-side validation first, then a network request.',
+    link: 'Form Validation', tab: 'frontend' },
+  { term: 'Toggle', group: 'action',
+    def: 'Switching a binary setting on or off — dark mode, notifications enabled, feature flags.',
+    link: 'Dark / Light Mode', tab: 'frontend' },
+  { term: 'Drag and Drop', group: 'action',
+    def: 'Moving an element by clicking, holding, and dragging it to a new location — used for file upload, reordering.',
+    link: 'Drag & Drop Upload', tab: 'frontend' },
+  { term: 'Sort', group: 'action',
+    def: 'Reordering a list or table by a column value — ascending or descending.',
+    link: 'Sortable Data Table', tab: 'frontend' },
+  { term: 'Filter', group: 'action',
+    def: 'Narrowing a list to show only items matching a condition — by status, date range, category, etc.',
+    link: 'Sortable Data Table', tab: 'frontend' },
+  { term: 'Search / Autocomplete', group: 'action',
+    def: 'Finding records by keyword — autocomplete shows suggestions as the user types to reduce input errors.',
+    link: 'Search Autocomplete', tab: 'frontend' },
+  { term: 'Scroll', group: 'action',
+    def: 'Moving through content that extends beyond the viewport — infinite scroll loads more items automatically.',
+    link: 'Infinite Scroll List', tab: 'frontend' },
+  { term: 'Redirect', group: 'action',
+    def: 'Automatically navigating the user to a new URL after an action — e.g., after login → dashboard.',
+    link: 'Login Flow', tab: 'flows' },
+  { term: 'Dismiss', group: 'action',
+    def: 'Closing a toast, modal, or drawer — via a close button, backdrop click, or ESC key.',
+    link: 'Modal Dialog', tab: 'frontend' },
+  { term: 'Validate', group: 'action',
+    def: 'Checking input data against rules before submission — shows inline errors for invalid fields.',
+    link: 'Form Validation', tab: 'frontend' },
+  { term: 'Retry', group: 'action',
+    def: 'Re-sending a failed request — appropriate after 429 (rate limited) or 5xx (server error) responses.',
+    link: '429 / 500 scenarios', tab: 'https' },
+  { term: 'Hover', group: 'action',
+    def: 'Moving the cursor over an element without clicking — often reveals a tooltip, callout, or visual state change.',
+    link: 'Nav Drawer', tab: 'frontend' },
+  { term: 'Focus', group: 'action',
+    def: 'Selecting an input for keyboard interaction — the browser adds a visible outline to the focused element.',
+    link: 'Form Validation', tab: 'frontend' },
+  { term: 'Onboarding', group: 'action',
+    def: 'A guided flow that helps new users understand the product and reach their first successful action.',
+    link: 'Sign Up + Onboarding', tab: 'flows' },
+  { term: 'Pagination', group: 'action',
+    def: 'Splitting a long list into pages — prev/next buttons or numbered page links limit how much data loads at once.',
+    link: 'Sortable Data Table', tab: 'frontend' },
+
+  // ── DATA ──────────────────────────────────────────────────
+  { term: 'Record', group: 'data',
+    def: 'A single entry in a database table — one row, representing one user, order, or other entity.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'Field', group: 'data',
+    def: 'A single named attribute of a record — email, name, created_at. Corresponds to a column in a table.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'Schema', group: 'data',
+    def: 'The definition of a database table — its columns, data types, constraints, and relationships.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'Primary Key (PK)', group: 'data',
+    def: 'A unique identifier for each record in a table — usually a UUID or auto-incrementing integer.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'Foreign Key (FK)', group: 'data',
+    def: 'A field that references the primary key of another table — creates a relationship between records.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'CRUD', group: 'data',
+    def: 'Create, Read, Update, Delete — the four basic operations on any data record, mapped to POST, GET, PUT/PATCH, DELETE.',
+    link: 'REST API Endpoints', tab: 'backend' },
+  { term: 'API (Application Programming Interface)', group: 'data',
+    def: 'A defined contract for how software components communicate — the frontend requests data from the backend via the API.',
+    link: 'REST API Endpoints', tab: 'backend' },
+  { term: 'Endpoint', group: 'data',
+    def: 'A specific URL that accepts requests for a particular resource — e.g., GET /api/users returns a list of users.',
+    link: 'REST API Endpoints', tab: 'backend' },
+  { term: 'Payload', group: 'data',
+    def: 'The data body of a request or response — typically JSON. What you send or receive beyond the headers.',
+    link: 'HTTPS Lifecycle', tab: 'https' },
+  { term: 'Status Code', group: 'data',
+    def: 'A 3-digit number in an HTTP response indicating the result — 200 OK, 404 Not Found, 500 Server Error.',
+    link: 'HTTPS Lifecycle', tab: 'https' },
+  { term: 'Cache', group: 'data',
+    def: 'A temporary store of frequently-accessed data that serves responses faster than querying the database each time.',
+    link: 'Cache Layer', tab: 'backend' },
+  { term: 'Soft Delete', group: 'data',
+    def: 'Marking a record as deleted (setting deleted_at) rather than removing it — preserves data for audits and recovery.',
+    link: 'Table / Schema Viewer', tab: 'backend' },
+  { term: 'Webhook', group: 'data',
+    def: 'A server-to-server notification — your server POSTs a JSON event payload to a registered URL when something happens.',
+    link: 'Webhooks', tab: 'backend' },
+  { term: 'Rate Limiting', group: 'data',
+    def: 'Capping how many API requests a client can make per time window — prevents abuse and protects server resources.',
+    link: 'Rate Limiting', tab: 'backend' },
+  { term: 'KPI (Key Performance Indicator)', group: 'data',
+    def: 'A single, prominently displayed metric that tells the user how something important is performing.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Empty State', group: 'data',
+    def: 'What a list, table, or dashboard looks like when there is no data yet — should prompt the user to take action.',
+    link: 'Sign Up + Onboarding', tab: 'flows' },
+  { term: 'Metadata', group: 'data',
+    def: 'Secondary data that describes a record — created date, owner, ID, status. Displayed in a metadata panel.',
+    link: 'App Anatomy', tab: 'anatomy' },
+  { term: 'Background Job', group: 'data',
+    def: 'A task processed asynchronously — email sending, PDF generation — so the HTTP response is not delayed.',
+    link: 'Background Job Queue', tab: 'backend' },
+
+  // ── AUTH ──────────────────────────────────────────────────
+  { term: 'Authentication (AuthN)', group: 'auth',
+    def: 'Verifying who the user is — proving identity via credentials, OAuth, or a magic link.',
+    link: 'Auth Flow', tab: 'backend' },
+  { term: 'Authorization (AuthZ)', group: 'auth',
+    def: 'Deciding what the authenticated user is allowed to do — based on their role or permissions.',
+    link: 'Role-Based Access (RBAC)', tab: 'backend' },
+  { term: 'Session', group: 'auth',
+    def: 'A server-side record of an authenticated user — linked to the browser via a cookie or token.',
+    link: 'Login Flow', tab: 'flows' },
+  { term: 'JWT (JSON Web Token)', group: 'auth',
+    def: 'A signed, self-contained token that proves identity — the server verifies it without a database lookup.',
+    link: 'Auth Flow', tab: 'backend' },
+  { term: 'OAuth', group: 'auth',
+    def: 'A protocol for signing in via a third-party provider (Google, GitHub) without sharing a password with the app.',
+    link: 'Login Form', tab: 'frontend' },
+  { term: 'RBAC (Role-Based Access Control)', group: 'auth',
+    def: 'Granting permissions based on a user\'s role — Admin, Editor, Viewer — rather than assigning them individually.',
+    link: 'Role-Based Access (RBAC)', tab: 'backend' },
+  { term: 'MFA / 2FA', group: 'auth',
+    def: 'Multi-factor authentication — requiring a second proof of identity (TOTP code) in addition to a password.',
+    link: 'Auth Flow', tab: 'backend' },
+  { term: 'Password Hashing', group: 'auth',
+    def: 'Storing a one-way cryptographic hash (bcrypt/Argon2) instead of the plaintext password — cannot be reversed.',
+    link: 'Auth Flow', tab: 'backend' },
+  { term: 'Reset Token', group: 'auth',
+    def: 'A cryptographically random, single-use string emailed to users to authorise a password change.',
+    link: 'Forgot Password', tab: 'flows' },
+  { term: 'Protected Route', group: 'auth',
+    def: 'A page that requires authentication — unauthenticated users are redirected to the login page.',
+    link: 'Login Flow', tab: 'flows' },
+  { term: 'User Enumeration', group: 'auth',
+    def: 'A security risk where different error messages reveal which email addresses have accounts. Always return the same message.',
+    link: 'Forgot Password', tab: 'flows' },
+  { term: 'Session Invalidation', group: 'auth',
+    def: 'Revoking all active sessions after a password change — forces other devices to re-authenticate.',
+    link: 'Forgot Password', tab: 'flows' },
+];
+
+const groupColors = { layout: 'accent3', action: 'accent4', data: 'accent2', auth: 'accent' };
+const groupOrder = ['layout', 'action', 'data', 'auth'];
+const groupLabels = { layout: 'Layout', action: 'Action', data: 'Data', auth: 'Auth' };
+let activeVocabGroup = 'all';
+
+function buildVocab(filter = '') {
+  const body = document.getElementById('vocabBody');
+  const empty = document.getElementById('vocabEmpty');
+  const filterLow = filter.toLowerCase();
+
+  // Filter terms
+  const filtered = vocabTerms.filter(t => {
+    const matchGroup = activeVocabGroup === 'all' || t.group === activeVocabGroup;
+    const matchSearch = !filterLow ||
+      t.term.toLowerCase().includes(filterLow) ||
+      t.def.toLowerCase().includes(filterLow);
+    return matchGroup && matchSearch;
+  });
+
+  // Update count
+  document.getElementById('vocabCount').textContent =
+    filtered.length === vocabTerms.length
+      ? `${vocabTerms.length} terms`
+      : `${filtered.length} of ${vocabTerms.length} terms`;
+
+  // Clear existing cards (keep group headings and empty msg)
+  body.querySelectorAll('.vocab-card, .vocab-group-heading').forEach(el => el.remove());
+  empty.style.display = filtered.length === 0 ? 'block' : 'none';
+
+  // Group and render
+  const groups = activeVocabGroup === 'all' ? groupOrder : [activeVocabGroup];
+  groups.forEach(g => {
+    const terms = filtered.filter(t => t.group === g);
+    if (!terms.length) return;
+
+    // Group heading
+    const heading = document.createElement('div');
+    heading.className = 'vocab-group-heading';
+    const dotColor = `var(--${groupColors[g]})`;
+    heading.innerHTML = `<div class="vocab-group-dot" style="background:${dotColor}"></div>${groupLabels[g]} Words`;
+    body.appendChild(heading);
+
+    // Cards
+    terms.forEach(t => {
+      const card = document.createElement('div');
+      card.className = `vocab-card group-${t.group}`;
+      card.innerHTML = `
+        <div class="vocab-term">${t.term}</div>
+        <div class="vocab-def">${t.def}</div>
+        <div class="vocab-card-footer">
+          <span class="vocab-group-tag tag-${t.group}">${groupLabels[t.group]}</span>
+          <span class="vocab-link" onclick="goToDemo('${t.tab}', '${t.link.replace(/'/g,"\\'")}')">→ ${t.link}</span>
+        </div>`;
+      body.appendChild(card);
+    });
+  });
+}
+
+function filterVocab() {
+  buildVocab(document.getElementById('vocabSearch').value);
+}
+
+function setVocabGroup(group, btn) {
+  activeVocabGroup = group;
+  document.querySelectorAll('.vocab-filter').forEach(b => {
+    b.className = 'vocab-filter';
+  });
+  btn.classList.add('active-' + group);
+  buildVocab(document.getElementById('vocabSearch').value);
+}
+
+function goToDemo(tabId, linkLabel) {
+  // Switch to the correct tab
+  const tabBtn = [...document.querySelectorAll('.tab')].find(b =>
+    b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tabId + "'")
+  );
+  if (tabBtn) {
+    switchTab(tabId, tabBtn);
+    // Brief flash so user sees the tab switch
+    setTimeout(() => {
+      // Try to find a demo card title matching the link label and scroll to it
+      const cards = document.querySelectorAll('.demo-card-title, .fmap-title, .legend-name');
+      for (const el of cards) {
+        if (el.textContent.trim().toLowerCase().includes(linkLabel.toLowerCase().substring(0, 12))) {
+          el.closest('.demo-card, .fmap-screen, .legend-item')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    }, 200);
+  }
+}
+
+// Init vocab on tab switch — build on first view
+let vocabBuilt = false;
+const origSwitchTab = switchTab;
+// Patch switchTab to init vocab on first open
+const _origSwitchTab = switchTab;
+function switchTab(id, btn) {
+  _origSwitchTab(id, btn);
+  if (id === 'vocab' && !vocabBuilt) {
+    buildVocab();
+    vocabBuilt = true;
+  }
+}
 // ────────────────────────────────────────────────────────────────
 
 </script>
