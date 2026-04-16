@@ -3027,6 +3027,10 @@ function switchTab(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
+  if (id === 'vocab' && !vocabBuilt) {
+    buildVocab();
+    vocabBuilt = true;
+  }
 }
 
 // Dark toggle (cosmetic)
@@ -4053,6 +4057,7 @@ switchFlow('login', document.querySelector('.flow-select-btn'));
 
 
 // ── VOCABULARY ───────────────────────────────────────────────────
+let vocabBuilt = false;
 const vocabTerms = [
 
   // ── LAYOUT ──────────────────────────────────────────────────
@@ -4357,18 +4362,6 @@ function goToDemo(tabId, linkLabel) {
   }
 }
 
-// Init vocab on tab switch — build on first view
-let vocabBuilt = false;
-const origSwitchTab = switchTab;
-// Patch switchTab to init vocab on first open
-const _origSwitchTab = switchTab;
-function switchTab(id, btn) {
-  _origSwitchTab(id, btn);
-  if (id === 'vocab' && !vocabBuilt) {
-    buildVocab();
-    vocabBuilt = true;
-  }
-}
 // ────────────────────────────────────────────────────────────────
 
 </script>
